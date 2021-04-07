@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <div id="map" class="map"></div>
@@ -18,7 +17,7 @@ export default {
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
       script.src =
-        "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=6e5e29693162c801d9dcaf92ac0e2c7e";
+        "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=34f61c06a3257c287e9e728ff2ad4394";
       document.head.appendChild(script);
     },
     initMap() {
@@ -37,7 +36,6 @@ export default {
 
 <style>
 .map {
-    position: absolute;
   width: 100%;
   height: 100vh;
 }

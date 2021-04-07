@@ -13,7 +13,7 @@
       size="small"
     ></el-input-number>
 
-    <el-menu default-active="true" background-color="#d5dfdb">
+    <el-menu default-active="true" background-color="#ffffff">
       <el-submenu index="">
         <!-- 주거 형태 -->
         <div style="margin-top: 20px">

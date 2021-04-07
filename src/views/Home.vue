@@ -18,10 +18,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.home {
-	float : right;
-	width : 78%;
-}
-</style>
