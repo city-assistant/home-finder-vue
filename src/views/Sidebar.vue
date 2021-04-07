@@ -15,6 +15,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import FilterItems from '../components/FilterItems.vue';
 export default {
