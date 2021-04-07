@@ -1,17 +1,20 @@
 <template>
     <div class="home">
-      <img alt="Vue logo" src="../assets/logo.png">
-      <HelloWorld msg="여기는 지도자리"/>
+      <!-- <img alt="Vue logo" src="../assets/logo.png">
+      <HelloWorld msg="여기는 지도자리"/> -->
+      <Map/>
     </div>
 </template>
 
 <script>
-import HelloWorld from '@/components/HelloWorld.vue'
+// import HelloWorld from '@/components/HelloWorld.vue'
+import Map from '../components/Map.vue'
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld,
+    // HelloWorld,
+    Map,
   }
 }
 </script>
