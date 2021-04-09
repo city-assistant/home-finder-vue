@@ -16,12 +16,15 @@
       </div>
     </div>
     <IntermediateResult :searchResult="searchResult"/>
+    <Map :searchResult="searchResult"/>
   </div>
 </template>
 
 <script>
 import FilterItems from "../components/FilterItems.vue";
-import IntermediateResult from './IntermediateResult.vue'
+import IntermediateResult from './IntermediateResult.vue';
+import Map from '../components/Map.vue';
+
 import axios from 'axios';
 
 export default {
@@ -34,7 +37,7 @@ export default {
       searchAddress: '',
     }
   },
-  components: { FilterItems, IntermediateResult },
+  components: { FilterItems, IntermediateResult, Map },
   methods: {
     searchQuery() {
       axios.post('http://localhost:9200/officetel-rent-data/_search', {
