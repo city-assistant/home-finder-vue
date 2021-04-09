@@ -38,7 +38,35 @@ color: #42b983;
   font-size: x-small;
 }
 
+#townInfo {
+  position: fixed;
+  top: 70%;
+  background-color: #ffffff;
+  width: 100%;
+  height: 30%;
+  opacity: 70%;
+  z-index: 5;
+  transition: 1s;
+}
+
+#townInfo:hover {
+  opacity: 100%;
+
+}
+
+#townInfo:hover {
+  opacity: 100%;
+}
+
 .map {
   width: 100%;
-  height: 97vh;
+  height: 98.3vh;
+}
+
+/* chart */
+.small {
+  float:left; 
+  top:2%; 
+  position: absolute;
+  width: 18%;
 }

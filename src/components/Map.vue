@@ -1,22 +1,56 @@
 <template>
   <div>
     <div id="map" class="map"></div>
+    <town-info :currentData="currentData"/>
   </div>
 </template>
 
 <script>
+import townInfo from './TownInfo.vue';
+
 export default {
+  props: {
+    searchResult: Array
+  },
+  components: {
+    townInfo
+  },
   data() {
     return {
-      map: undefined
+      map: undefined,
+      geocoder: undefined,
+      markerList: [],
+      currentData: ""
     }
   },
   mounted() {
     window.kakao && window.kakao.maps
       ? this.initMap()
       : this.addKakaoMapScript();
+  },
+  watch: {
+    searchResult: function(val) {
+      console.log(val)
 
-    this.setMarker()
+      this.currentData = val[0]._source['시군구'];
+
+      this.markerList.map((marker) => marker.setMap(null));
+      this.markerList = []
+      if (val != []) {
+        console.log(val[0]._source)
+        let lat = parseFloat(val[0]._source.location.split(',')[0]);
+        let long = parseFloat(val[0]._source.location.split(',')[1]);
+
+        
+        for (let result of val) {
+          console.log(result._source['시군구'] + ' ' + result._source['도로명']);
+          this.setMarkerFromAddress(result._source['시군구'] + ' ' + result._source['도로명']);
+        }
+
+        // 지도 중심을 이동 시킵니다
+        this.map.panTo(new kakao.maps.LatLng(lat, long));
+      }
+    }
   },
   methods: {
     addKakaoMapScript() {
@@ -24,30 +58,42 @@ export default {
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
       script.src =
-        "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=6e5e29693162c801d9dcaf92ac0e2c7e";
+        "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=6e5e29693162c801d9dcaf92ac0e2c7e&libraries=services,clusterer,drawing";
       document.head.appendChild(script);
+      this.geocoder = new kakao.maps.services.Geocoder()
     },
     initMap() {
-      var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
-      var options = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
-        level: 3 //지도의 레벨(확대, 축소 정도)
+      let container = document.getElementById('map');
+      let options = {
+          center: new kakao.maps.LatLng(37.566826, 126.9786567),
+          level: 3
       };
 
-      this.map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
-      
+      this.map = new kakao.maps.Map(container, options);
+      this.geocoder = new kakao.maps.services.Geocoder();
     },
-    setMarkers(locations) {
-      for (location of locations) {
-        var markerPosition  = new kakao.maps.LatLng(33.450701, 126.570667); 
+    setMarkerFromAddress(address) {
+      this.geocoder.addressSearch(address, (result, status) => {
+        if (status === kakao.maps.services.Status.OK) {
+            let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+            let marker = new kakao.maps.Marker({
+                map: this.map,
+                position: coords,
+                clickable: true
+            });
 
-        // 마커를 생성합니다
-        var marker = new kakao.maps.Marker({
-            position: markerPosition
-        });
-        marker.setMap(this.map);
-      }
-    }
+            kakao.maps.event.addListener(marker, 'click', function() {
+              if (document.getElementById('townInfo').style.display == 'block') {
+                document.getElementById('townInfo').style.display = 'none';
+              } else {
+                document.getElementById('townInfo').style.display = 'block';
+              }
+            });
+
+            this.markerList.push(marker);
+        } 
+      });
+    },
   }
 };
 </script>
