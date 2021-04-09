@@ -1,0 +1,53 @@
+<template>
+  <div>
+    <div class="sidebar">
+      <div class="sub-title">목적지 검색</div>
+      <el-autocomplete
+        class="inline-input"
+        v-model="searchAddress"
+        :fetch-suggestions="querySearch"
+        placeholder="목적지를 입력해주세요"
+        :trigger-on-focus="false"
+        @select="handleSelect"
+      ></el-autocomplete>
+      <el-button type="primary" icon="el-icon-search" v-on:click="searchQuery">Search</el-button>
+      <div id="filters">
+        <filter-items />
+      </div>
+    </div>
+    <IntermediateResult :searchResult="searchResult"/>
+  </div>
+</template>
+
+<script>
+import FilterItems from "../components/FilterItems.vue";
+import IntermediateResult from './IntermediateResult.vue'
+import axios from 'axios';
+
+export default {
+  name: "Sidebar",
+  props: {
+    searchResult: String
+  },
+  data() {
+    return {
+      searchAddress: '',
+    }
+  },
+  components: { FilterItems, IntermediateResult },
+  methods: {
+    searchQuery() {
+      axios.post('http://localhost:9200/officetel-rent-data/_search', {
+          "query": {
+            "match": {
+              "시군구": this.searchAddress
+            }
+          }
+      }).then(res => { 
+        console.log(res.data.hits.hits) 
+        this.searchResult = res.data.hits.hits
+      })
+    }
+  },
+};
+</script>

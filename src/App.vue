@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      <sidebar/>
+      <Navigator :searchResult="searchResult"/>
     </div>
     <router-view/>
   </div>
@@ -11,11 +11,17 @@
 </style>
 
 <script>
-import Sidebar from './views/Sidebar.vue';
+import Navigator from './components/Navigator';
+
 export default {
   name: 'App',
+  data() {
+    return {
+      searchResult: ''
+    }
+  },
   components: {
-    Sidebar
+    Navigator,
   }
 }
 </script>
