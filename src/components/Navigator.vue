@@ -41,15 +41,26 @@ export default {
   methods: {
     searchQuery() {
       axios.post('http://localhost:9200/officetel-rent-data/_search', {
+          "size":30,
           "query": {
             "match": {
               "시군구": this.searchAddress
             }
           }
       }).then(res => { 
-        console.log(res.data.hits.hits) 
+        console.log(res.data.hits.hits)
         this.searchResult = res.data.hits.hits
       })
+    },
+    // 중복 제거
+    mappingQuery() {
+      for(let i = 0; i < this.searchResult.length; i++ ){
+      if(this.searchResult.indexOf(this.searchResult._source.단지명) != -1){
+        console.log("값이잇나")
+           this.searchResult.push(this.searchResult[i])
+        }
+      }
+      return this.searchResult;
     }
   },
 };
