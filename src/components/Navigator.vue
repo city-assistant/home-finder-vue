@@ -12,7 +12,7 @@
       ></el-autocomplete>
       <el-button type="primary" icon="el-icon-search" v-on:click="searchQuery">Search</el-button>
       <div id="filters">
-        <filter-items />
+        <filter-items v-on:distanceUpdate="distanceUpdate" v-on:rentUpdate="rentUpdate" v-on:depositUpdate="depositUpdate" v-on:leaseTypeUpdate="leaseTypeUpdate"/>
       </div>
     </div>
     <IntermediateResult :searchResult="searchResult"/>
@@ -35,27 +35,69 @@ export default {
   data() {
     return {
       searchAddress: '',
+      leaseType: '월세',
+      distance: 5,
+      deposit: [10000, 25000],
+      rent: [0, 20],
     }
   },
   components: { FilterItems, IntermediateResult, Map },
   methods: {
+    distanceUpdate(val) {
+      this.distance = val
+    },
+    leaseTypeUpdate(val) {
+      this.leaseType = val
+    },
+    depositUpdate(val) {
+      this.deposit = val
+    },
+    rentUpdate(val) {
+      this.rent = val
+    },
     searchQuery() {
       axios.post('http://localhost:9200/officetel-rent-data/_search', {
-        "size":100,
+        "size":1000,
         "query": {
           "bool": {
             "must": [
-                {
-                  "prefix": {
+              {
+                "prefix": {
                   "시군구": this.searchAddress
-                  }
                 }
+              },{
+                "match": {
+                  "전월세구분": this.leaseType
+                }
+              }
             ],
             "filter": [
               {
+                "geo_distance": {
+                  "distance": this.distance + "km",
+                  "location": {
+                    "lat": 37.55512250329622,
+                    "lon": 126.97066955652348
+                  }
+                }
+              },{
                 "range": {
                   "yyyymmdd": {
                     "gte": 20200000
+                  }
+                }
+              },{
+                "range": {
+                  "deposit": {
+                    "gte": this.deposit[0],
+                    "lte": this.deposit[1]
+                  }
+                }
+              },{
+                "range": {
+                  "rent": {
+                    "gte": this.rent[0],
+                    "lte": this.rent[1]
                   }
                 }
               }

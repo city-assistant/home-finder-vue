@@ -1,8 +1,8 @@
 <template>
   <div id="townInfo" style="display:none">
-      {{ currentData }} <br><br>
-      여기에 동네 정보를 표기할 수 있을 것 같습니다
+      {{ chosenAddress }} <br><br>
       <br><br>
+      {{ currentData }} 정보!<br><br>
       <LineChart :passData='passData'/>
       <LineChart :passData='passData'/>
   </div>
@@ -18,6 +18,7 @@ export default {
     },
     props: {
         currentData: String,
+        chosenAddress: String
     },
     data() {
         return {

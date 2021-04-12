@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="map" class="map"></div>
-    <town-info :currentData="currentData"/>
+    <town-info :currentData="currentData" :chosenAddress="chosenAddress"/>
   </div>
 </template>
 
@@ -20,7 +20,8 @@ export default {
       map: undefined,
       geocoder: undefined,
       markerList: [],
-      currentData: ""
+      currentData: "",
+      chosenAddress: ""
     }
   },
   mounted() {
@@ -33,23 +34,19 @@ export default {
       console.log(val);
     },
     searchResult: function(val) {
-      console.log(val)
-
+      const valPatch = val.map((result) => result._source['시군구'] + ' ' + result._source['도로명'] + '$' + result._source['시군구'])
+      const setValPatch = new Set(valPatch);
+      
       this.currentData = val[0]._source['시군구'];
 
       this.markerList.map((marker) => marker.setMap(null));
       this.markerList = []
       if (val != []) {
-        console.log(val[0]._source)
         let lat = parseFloat(val[0]._source.location.split(',')[0]);
         let long = parseFloat(val[0]._source.location.split(',')[1]);
-
-        
-        for (let result of val) {
-          console.log(result._source['시군구'] + ' ' + result._source['도로명']);
-          this.setMarkerFromAddress(result._source['시군구'] + ' ' + result._source['도로명'], result._source['시군구']);
+        for (let result of setValPatch) {
+          this.setMarkerFromAddress(result.split('$')[0], result.split('$')[1]);
         }
-
         // 지도 중심을 이동 시킵니다
         this.map.panTo(new kakao.maps.LatLng(lat, long));
       }
@@ -85,9 +82,14 @@ export default {
                 clickable: true
             });
             kakao.maps.event.addListener(marker, 'click', () => {
-              if (document.getElementById('townInfo').style.display == 'block') {
-                document.getElementById('townInfo').style.display = 'none';
+              if (this.getChosenAddress() == address) {
+                if (document.getElementById('townInfo').style.display == 'block') {
+                  document.getElementById('townInfo').style.display = 'none';
+                } else {
+                  document.getElementById('townInfo').style.display = 'block';
+                }
               } else {
+                this.alterChosenAddress(address);
                 this.alterCurrentData(city);
                 document.getElementById('townInfo').style.display = 'block';
               }
@@ -98,6 +100,12 @@ export default {
     },
     alterCurrentData(val) {
       this.currentData = val;
+    },
+    alterChosenAddress(val) {
+      this.chosenAddress = val;
+    },
+    getChosenAddress() {
+      return this.chosenAddress
     }
   }
 };

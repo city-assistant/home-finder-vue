@@ -1,8 +1,6 @@
 <template>
   <div class="filter">
-    <h2>여기에 필터들</h2>
-
-    <h5>소요시간</h5>
+    <h5>소요시간(준비중)</h5>
     <!-- 목적지까지 소요시간 -->
     <el-input-number
       v-model="num"
@@ -10,6 +8,16 @@
       :min="15"
       :max="90"
       :step="15"
+      size="small"
+    ></el-input-number>
+
+    <h5>거리 (해당 km 이하)</h5>
+    <el-input-number
+      v-model="distance"
+      @change="handleChange"
+      :min="0"
+      :max="30"
+      :step="1"
       size="small"
     ></el-input-number>
 
@@ -30,7 +38,7 @@
           <el-radio-group v-model="leaseType" size="small">
             <el-radio-button label="월세"></el-radio-button>
             <el-radio-button label="전세"></el-radio-button>
-            <el-radio-button label="매매"></el-radio-button>
+            <!-- <el-radio-button label="매매"></el-radio-button> -->
           </el-radio-group>
         </div>
 
@@ -38,7 +46,7 @@
         <div class="block">
           <el-slider
             style="margin: 10px"
-            v-model="deposite"
+            v-model="deposit"
             step="1000"
             range
             show-stops
@@ -51,11 +59,11 @@
         <div class="block">
           <el-slider
             style="margin: 10px"
-            v-model="dimension"
+            v-model="rent"
             step="10"
             range
             show-stops
-            :max="50"
+            :max="200"
           >
           </el-slider>
         </div>
@@ -68,12 +76,28 @@ export default {
   name: "FilterItems",
   data() {
     return {
+      distance: 5,
+      rentStep: 10,
       num: 15,
       homeType: "오피스텔",
       leaseType: "월세",
-      deposite: [10000, 25000],
-      dimension: [0, 20],
+      deposit: [10000, 25000],
+      rent: [0, 20],
     };
+  },
+  watch: {
+    distance: function(val) {
+      this.$emit("distanceUpdate", val)
+    },
+    leaseType: function(val) {
+      this.$emit("leaseTypeUpdate", val)
+    },
+    deposit: function(val) {
+      this.$emit("depositUpdate", val)
+    },
+    rent: function(val) {
+      this.$emit("rentUpdate", val)
+    },
   },
   methods: {
     handleChange(value) {

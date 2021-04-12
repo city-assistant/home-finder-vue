@@ -19,8 +19,12 @@
       width="90%">
     </el-table-column>
     <el-table-column
-      prop="_source.단지명"
-      label="위치">
+      prop="_source.deposit"
+      label="보증금">
+    </el-table-column>
+    <el-table-column
+      prop="_source.rent"
+      label="월세">
     </el-table-column>
     </el-table>
   
