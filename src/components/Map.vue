@@ -29,6 +29,9 @@ export default {
       : this.addKakaoMapScript();
   },
   watch: {
+    currentData: function(val) {
+      console.log(val);
+    },
     searchResult: function(val) {
       console.log(val)
 
@@ -44,7 +47,7 @@ export default {
         
         for (let result of val) {
           console.log(result._source['시군구'] + ' ' + result._source['도로명']);
-          this.setMarkerFromAddress(result._source['시군구'] + ' ' + result._source['도로명']);
+          this.setMarkerFromAddress(result._source['시군구'] + ' ' + result._source['도로명'], result._source['시군구']);
         }
 
         // 지도 중심을 이동 시킵니다
@@ -72,7 +75,7 @@ export default {
       this.map = new kakao.maps.Map(container, options);
       this.geocoder = new kakao.maps.services.Geocoder();
     },
-    setMarkerFromAddress(address) {
+    setMarkerFromAddress(address, city) {
       this.geocoder.addressSearch(address, (result, status) => {
         if (status === kakao.maps.services.Status.OK) {
             let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
@@ -81,19 +84,21 @@ export default {
                 position: coords,
                 clickable: true
             });
-
-            kakao.maps.event.addListener(marker, 'click', function() {
+            kakao.maps.event.addListener(marker, 'click', () => {
               if (document.getElementById('townInfo').style.display == 'block') {
                 document.getElementById('townInfo').style.display = 'none';
               } else {
+                this.alterCurrentData(city);
                 document.getElementById('townInfo').style.display = 'block';
               }
             });
-
             this.markerList.push(marker);
         } 
       });
     },
+    alterCurrentData(val) {
+      this.currentData = val;
+    }
   }
 };
 </script>

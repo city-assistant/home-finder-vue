@@ -11,6 +11,9 @@
     components: {
       LineChart
     },
+    props: {
+      passData: Object
+    },
     data () {
       return {
         datacollection: null
@@ -19,26 +22,33 @@
     mounted () {
       this.fillData()
     },
+    watch: {
+      passData: function(data) {
+        this.datacollection = {
+          labels: data.labels,
+          datasets: data.datasets
+        }
+
+        console.log(this.datacollection);
+      }
+    },
     methods: {
       fillData () {
         this.datacollection = {
-          labels: [this.getRandomInt(), this.getRandomInt()],
+          labels: [1,2],
           datasets: [
             {
               label: 'Data One',
               backgroundColor: '#f87979',
-              data: [this.getRandomInt(), this.getRandomInt()]
+              data: [0, 1]
             }, {
               label: 'Data One',
               backgroundColor: '#f87979',
-              data: [this.getRandomInt(), this.getRandomInt()]
+              data: [0.5, 2]
             }
           ]
         }
       },
-      getRandomInt () {
-        return Math.floor(Math.random() * (50 - 5 + 1)) + 5
-      }
     }
   }
 </script>

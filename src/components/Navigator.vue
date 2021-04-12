@@ -41,16 +41,34 @@ export default {
   methods: {
     searchQuery() {
       axios.post('http://localhost:9200/officetel-rent-data/_search', {
-          "size":30,
-          "query": {
-            "match": {
-              "시군구": this.searchAddress
-            }
+        "size":100,
+        "query": {
+          "bool": {
+            "must": [
+                {
+                  "prefix": {
+                  "시군구": this.searchAddress
+                  }
+                }
+            ],
+            "filter": [
+              {
+                "range": {
+                  "yyyymmdd": {
+                    "gte": 20200000
+                  }
+                }
+              }
+            ]
           }
+        }
       }).then(res => { 
         console.log(res.data.hits.hits)
         this.searchResult = res.data.hits.hits
       })
+    },
+    searchArround() {
+      
     },
     // 중복 제거
     mappingQuery() {

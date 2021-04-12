@@ -1,8 +1,10 @@
 <template>
   <div id="townInfo" style="display:none">
-      <LineChart/>
-      {{ currentData }} <br>
+      {{ currentData }} <br><br>
       여기에 동네 정보를 표기할 수 있을 것 같습니다
+      <br><br>
+      <LineChart :passData='passData'/>
+      <LineChart :passData='passData'/>
   </div>
 </template>
 
@@ -17,72 +19,83 @@ export default {
     props: {
         currentData: String,
     },
+    data() {
+        return {
+            passData: {}
+        }
+    },
     watch: {
-        currentData: function(val) {
+        currentData: function(data) {
+            this.getChartData(data)
+        }
+    },
+    methods: {
+        getChartData(val) {
             axios.post('http://localhost:9200/officetel-rent-data/_search', {
-            "size": 0,
-            "sort": {
-                "@timestamp": {
-                "order": "asc"
-                }
-            },
-            "query": {
-                "bool": {
-                    "must": [
-                        {"match": {"전월세구분": "월세"}},
-                        {"prefix": {"시군구": {"value": "서울특별시 강서구 마곡동"}}}
-                    ]
-                } 
-            }, 
-            "aggs": {
-                "result": {
-                "date_histogram": {
-                    "field": "@timestamp",
-                    "calendar_interval": "year",
-                    "format": "yyyy"
+                "size": 0,
+                "sort": {
+                    "@timestamp": {
+                    "order": "asc"
+                    }
                 },
+                "query": {
+                    "bool": {
+                        "must": [
+                            {"match": {"전월세구분": "월세"}},
+                            {"prefix": {"시군구": {"value": val}}}
+                        ]
+                    } 
+                }, 
                 "aggs": {
-                    "면적": {
-                    "avg": {
-                        "field": "area"
-                    }
+                    "result": {
+                    "date_histogram": {
+                        "field": "@timestamp",
+                        "calendar_interval": "year",
+                        "format": "yyyy"
                     },
-                    "보증금": {
-                    "avg": {
-                        "field": "deposit"
+                    "aggs": {
+                        "면적": {
+                            "avg": {"field": "area"}},
+                            "보증금": {"avg": {"field": "deposit"}},
+                            "월세": {"avg": {"field": "rent"}},
+                            "10평당 월세": {
+                            "bucket_script": {
+                                "buckets_path": {
+                                "v1": "면적",
+                                "v2": "월세"
+                                },
+                                "script": "params.v2 / params.v1 * 33"
+                            }
+                            },
+                            "10평당 보증금": {
+                            "bucket_script": {
+                                "buckets_path": {
+                                "v1": "면적",
+                                "v2": "보증금"
+                                },
+                                "script": "params.v2 / params.v1 * 33"
+                            }
+                        }
                     }
-                    },
-                    "월세": {
-                    "avg": {
-                        "field": "rent"
-                    }
-                    },
-                    "10평당 월세": {
-                    "bucket_script": {
-                        "buckets_path": {
-                        "v1": "면적",
-                        "v2": "월세"
-                        },
-                        "script": "params.v2 / params.v1 * 33"
-                    }
-                    },
-                    "10평당 보증금": {
-                    "bucket_script": {
-                        "buckets_path": {
-                        "v1": "면적",
-                        "v2": "보증금"
-                        },
-                        "script": "params.v2 / params.v1 * 33"
-                    }
-                    }
-                }
                 }
             }
             }).then(res => { 
-                console.log(res.data.aggregations.result.buckets)
+                console.log();
+                let labels = []
+                let tempData1 = {data:[], label:'10평당 보증금'}
+                let tempData2 = {data:[], label:'10평당 월세'}
+                for (let data of res.data.aggregations.result.buckets){
+                    labels.push(data.key_as_string)
+                    tempData1['data'].push(data['10평당 보증금'].value)
+                    tempData2['data'].push(data['10평당 월세'].value)
+                }
+
+                this.passData = {
+                    labels: labels,
+                    datasets: [tempData1, tempData2]
+                }
             })
-            console.log(val);
         }
-    }
+    },
 }
 </script>
