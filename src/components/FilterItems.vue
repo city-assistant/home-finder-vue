@@ -50,7 +50,7 @@
             step="1000"
             range
             show-stops
-            :max="100000"
+            :max="30000"
           >
           </el-slider>
         </div>

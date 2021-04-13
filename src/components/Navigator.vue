@@ -35,6 +35,7 @@ export default {
   },
   data() {
     return {
+      links: [],
       searchAddress: '',
       leaseType: '월세',
       distance: 5,
@@ -126,7 +127,56 @@ export default {
         }
       }
       return this.searchResult;
-    }
+    },
+    querySearch(queryString, cb) {
+      var links = this.links;
+      var results = queryString
+        ? links.filter(this.createFilter(queryString))
+        : links;
+      cb(results);
+    },
+    createFilter(queryString) {
+      return (link) => {
+        return (
+          link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+        );
+      };
+    },
+    loadAll() {
+      axios
+        .post("http://localhost:9200/officetel-rent-data/_search",{
+          size: 0,
+          query: {
+            prefix: {
+              시군구: {
+                value: "서울"
+              }
+            }
+          }, 
+          aggs: {
+            group_by_state: {
+              terms: {
+                size: 10000000, 
+                field: "시군구"
+              }
+            }
+          }
+        })
+        .then((res) => {
+          console.log(res.data.aggregations.group_by_state.buckets);
+          res.data.aggregations.group_by_state.buckets.map(val => {
+              this.links.push({value: val.key});
+          });
+          console.log('======================================')
+          console.log(this.links)
+        });
+    },
+    handleSelect(item) {
+      console.log(item);
+    },
+  },
+  mounted() {
+    this.loadAll();
   },
 };
 </script>
