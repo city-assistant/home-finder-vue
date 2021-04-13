@@ -16,11 +16,12 @@ body {
   }
   
 .navBar {
-  position: sticky;
+  position: absolute;
   top: 0;
   width: 100%;
   height: 50px;
   background-color: aliceblue;
+  z-index: 6;
 }
 
 .navBar #title {
@@ -88,8 +89,8 @@ color: #42b983;
 }
 
 .map {
-  width: 100%;
-  height: 98.3vh;
+  width: 100vw;
+  height: 100vh;
   margin: 0;
 }
 
