@@ -6,7 +6,7 @@
         class="inline-input"
         v-model="searchAddress"
         :fetch-suggestions="querySearch"
-        placeholder="한정지을 지역이 있다면 적어주세요"
+        placeholder="한정지을 지역(선택)"
         :trigger-on-focus="false"
         @select="handleSelect"
       ></el-autocomplete>
