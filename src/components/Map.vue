@@ -21,7 +21,8 @@ export default {
       geocoder: undefined,
       markerList: [],
       currentData: "",
-      chosenAddress: ""
+      chosenAddress: "",
+      chosenPoint: []
     }
   },
   mounted() {
@@ -30,6 +31,9 @@ export default {
       : this.addKakaoMapScript();
   },
   watch: {
+    chosenPoint: function(val) {
+      this.$emit("chosenPointUpdate", val)
+    },
     currentData: function(val) {
       console.log(val);
     },
@@ -69,8 +73,20 @@ export default {
           level: 3
       };
 
+
+
       this.map = new kakao.maps.Map(container, options);
       this.geocoder = new kakao.maps.services.Geocoder();
+
+      kakao.maps.event.addListener(this.map, 'click', (mouseEvent) => {        
+          // 클릭한 위도, 경도 정보를 가져옵니다 
+          var latlng = mouseEvent.latLng;
+          var message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
+          message += '경도는 ' + latlng.getLng() + ' 입니다';
+          console.log(message);
+          this.chosenPoint = [latlng.getLat(), latlng.getLng()]
+      });
+
     },
     setMarkerFromAddress(address, city) {
       this.geocoder.addressSearch(address, (result, status) => {

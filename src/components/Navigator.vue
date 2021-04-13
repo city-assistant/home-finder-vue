@@ -2,6 +2,7 @@
   <div>
     <div class="sidebar">
       <div class="sub-title">목적지 검색</div>
+      고른 위치 : {{ chosenPoint }}
       <el-autocomplete
         class="inline-input"
         v-model="searchAddress"
@@ -16,7 +17,7 @@
       </div>
     </div>
     <IntermediateResult :searchResult="searchResult"/>
-    <Map :searchResult="searchResult"/>
+    <Map :searchResult="searchResult" v-on:chosenPointUpdate="chosenPointUpdate"/>
   </div>
 </template>
 
@@ -39,10 +40,14 @@ export default {
       distance: 5,
       deposit: [10000, 25000],
       rent: [0, 20],
+      chosenPoint: [37.566409573096465, 126.97772421964528]
     }
   },
   components: { FilterItems, IntermediateResult, Map },
   methods: {
+    chosenPointUpdate(val) {
+      this.chosenPoint = val;
+    },
     distanceUpdate(val) {
       this.distance = val
     },
@@ -76,8 +81,8 @@ export default {
                 "geo_distance": {
                   "distance": this.distance + "km",
                   "location": {
-                    "lat": 37.55512250329622,
-                    "lon": 126.97066955652348
+                    "lat": this.chosenPoint[0],
+                    "lon": this.chosenPoint[1]
                   }
                 }
               },{
