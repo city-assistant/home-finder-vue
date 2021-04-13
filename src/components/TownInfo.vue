@@ -2,7 +2,7 @@
   <div id="townInfo" style="display:none">
       {{ chosenAddress }} <br><br>
       <br><br>
-      {{ currentData }} 정보!<br><br>
+      {{ currentData }} 정보<br><br>
       <LineChart :passData='passData'/>
       <LineChart :passData='passData'/>
   </div>
