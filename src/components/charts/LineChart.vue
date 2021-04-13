@@ -28,8 +28,6 @@
           labels: data.labels,
           datasets: data.datasets
         }
-
-        console.log(this.datacollection);
       }
     },
     methods: {

@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <NavBar/>
     <div id="nav">
       <Navigator :searchResult="searchResult"/>
     </div>
@@ -12,6 +13,7 @@
 
 <script>
 import Navigator from './components/Navigator';
+import NavBar from './components/NavBar';
 
 export default {
   name: 'App',
@@ -21,7 +23,8 @@ export default {
     }
   },
   components: {
-    Navigator,
+    Navigator, 
+    NavBar
   }
 }
 </script>

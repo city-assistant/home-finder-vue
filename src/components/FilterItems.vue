@@ -81,8 +81,8 @@ export default {
       num: 15,
       homeType: "오피스텔",
       leaseType: "월세",
-      deposit: [10000, 25000],
-      rent: [0, 20],
+      deposit: [0, 25000],
+      rent: [0, 100],
     };
   },
   watch: {

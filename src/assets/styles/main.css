@@ -1,3 +1,10 @@
+html, 
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -8,12 +15,34 @@
     z-index:1;
   }
   
+.navBar {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 50px;
+  background-color: aliceblue;
+}
+
+.navBar #title {
+  float: left;
+  font-size: large;
+  margin-top: 15px;
+  margin-left: 5px;
+}
+
+.navBar #userManage {
+  float: right;
+  font-size: large;
+  margin-top: 15px;
+  margin-right: 5px;
+}
+
 .sidebar {
   position: absolute;
   float : left;
   background-color: #ffffff;
 	width : 250px;
-  top: 10px;
+  top: 60px;
   left: 10px;
   z-index:2;
   box-shadow: #2c3e50;
@@ -32,8 +61,8 @@ color: #42b983;
   position: absolute;
   float : right;
   background-color: #ffffff;
-	width : 250px;
-  top: 10px;
+	width : 300px;
+  top: 60px;
   right: 10px;
   z-index:2;
   font-size: x-small;
@@ -46,8 +75,8 @@ color: #42b983;
   align-items: center;
   align-content: center;
 	width : 250px;
-  height: 60%;
-  top: 39%;
+  height: 50%;
+  top: 45%;
   left: 10px;
   z-index: 1;
   transition: 1s;
@@ -61,6 +90,7 @@ color: #42b983;
 .map {
   width: 100%;
   height: 98.3vh;
+  margin: 0;
 }
 
 /* chart */

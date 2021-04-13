@@ -1,13 +1,12 @@
 <template>
   <div>
     <div class="sidebar">
-      <div class="sub-title">목적지 검색</div>
-      고른 위치 : {{ chosenPoint }}
+      <div class="sub-title">목적지 위치 : {{ chosenPoint }} </div>
       <el-autocomplete
         class="inline-input"
         v-model="searchAddress"
         :fetch-suggestions="querySearch"
-        placeholder="목적지를 입력해주세요"
+        placeholder="한정지을 지역이 있다면 적어주세요"
         :trigger-on-focus="false"
         @select="handleSelect"
       ></el-autocomplete>
@@ -39,8 +38,8 @@ export default {
       searchAddress: '',
       leaseType: '월세',
       distance: 5,
-      deposit: [10000, 25000],
-      rent: [0, 20],
+      deposit: [0, 25000],
+      rent: [0, 100],
       chosenPoint: [37.566409573096465, 126.97772421964528]
     }
   },

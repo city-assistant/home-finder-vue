@@ -2,7 +2,11 @@
   <div id="townInfo" style="display:none">
       {{ chosenAddress }} <br><br>
       <br><br>
+
       {{ currentData }} 정보<br><br>
+
+      상권이나 근린, 역, 편의점 등의 정보도 긁어오자
+
       <LineChart :passData='passData'/>
       <LineChart :passData='passData'/>
   </div>
