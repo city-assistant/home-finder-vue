@@ -100,7 +100,7 @@ export default {
                 if (document.getElementById('townInfo').style.display == 'block') {
                   document.getElementById('townInfo').style.display = 'none';
                 } else {
-                  this.getLocationGeo(city);
+                  // this.getLocationGeo(city);
                   document.getElementById('townInfo').style.display = 'block';
                 }
               } else {
