@@ -16,7 +16,7 @@
       </div>
     </div>
     <IntermediateResult v-on:emitAddress="emphasizeMarker" :searchResult="searchResult"/>
-    <Map :searchResult="searchResult" v-on:chosenPointUpdate="chosenPointUpdate"/>
+    <Map :emphasizedMarker="emphasizedMarker" :searchResult="searchResult" v-on:chosenPointUpdate="chosenPointUpdate" />
   </div>
 </template>
 
@@ -41,13 +41,14 @@ export default {
       deposit: [0, 25000],
       rent: [0, 100],
       area: [10, 50],
-      chosenPoint: [37.566409573096465, 126.97772421964528]
+      chosenPoint: [37.566409573096465, 126.97772421964528],
+      emphasizedMarker: ''
     }
   },
   components: { FilterItems, IntermediateResult, Map },
   methods: {
     emphasizeMarker(val){
-      console.log(val);
+      this.emphasizedMarker = val;
     },
     areaUpdate(val) {
       this.areaUpdate = val;

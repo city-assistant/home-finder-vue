@@ -11,7 +11,8 @@ import townInfo from './TownInfo.vue';
 
 export default {
   props: {
-    searchResult: Array
+    searchResult: Array,
+    emphasizedMarker: String
   },
   components: {
     townInfo
@@ -24,7 +25,7 @@ export default {
       markerList: [],
       currentData: "",
       chosenAddress: "",
-      chosenPoint: []
+      chosenPoint: [],
     }
   },
   mounted() {
@@ -33,6 +34,9 @@ export default {
       : this.addKakaoMapScript();
   },
   watch: {
+    emphasizedMarker: function(val){
+      console.log(val);
+    },
     chosenPoint: function(val) {
       this.$emit("chosenPointUpdate", val)
     },
