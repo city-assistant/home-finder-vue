@@ -20,6 +20,7 @@ export default {
     return {
       map: undefined,
       geocoder: undefined,
+      clusterer: undefined,
       markerList: [],
       currentData: "",
       chosenAddress: "",
@@ -43,7 +44,6 @@ export default {
       const setValPatch = new Set(valPatch);
       
       this.currentData = val[0]._source['시군구'];
-
       this.markerList.map((marker) => marker.setMap(null));
       this.markerList = []
       if (val != []) {
@@ -85,6 +85,11 @@ export default {
           this.chosenPoint = [latlng.getLat(), latlng.getLng()]
       });
 
+      // this.clusterer = new kakao.maps.MarkerClusterer({
+      //     map: this.map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+      //     averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+      //     minLevel: 4 // 클러스터 할 최소 지도 레벨 
+      // });
     },
     setMarkerFromAddress(address, city) {
       this.geocoder.addressSearch(address, (result, status) => {
@@ -93,7 +98,8 @@ export default {
             let marker = new kakao.maps.Marker({
                 map: this.map,
                 position: coords,
-                clickable: true
+                clickable: true,
+                text: address
             });
             kakao.maps.event.addListener(marker, 'click', () => {
               if (this.getChosenAddress() == address) {

@@ -41,7 +41,19 @@
             <!-- <el-radio-button label="매매"></el-radio-button> -->
           </el-radio-group>
         </div>
-
+        <br><br>면적
+        <div class="block">
+          <el-slider
+            style="margin: 10px"
+            v-model="area"
+            step="10"
+            range
+            show-stops
+            :max="200"
+          >
+          </el-slider>
+        </div>
+        보증금
         <!-- 보증금 최소, 최대 -->
         <div class="block">
           <el-slider
@@ -54,8 +66,7 @@
           >
           </el-slider>
         </div>
-
-        <!-- 면적 최소, 최대 (평수 기준) -->
+        월세
         <div class="block">
           <el-slider
             style="margin: 10px"
@@ -83,9 +94,13 @@ export default {
       leaseType: "월세",
       deposit: [0, 25000],
       rent: [0, 100],
+      area: [10, 50]
     };
   },
   watch: {
+    area: function(val) {
+      this.$emit("areaUpdate", val)
+    },
     distance: function(val) {
       this.$emit("distanceUpdate", val)
     },

@@ -9,6 +9,18 @@
     style="width: 100%">
     
     <el-table-column
+      prop="_source.deposit"
+      label="보증금">
+    </el-table-column>
+    <el-table-column
+      prop="_source.rent"
+      label="월세">
+    </el-table-column>
+    <el-table-column
+      prop="_source.area"
+      label="면적">
+    </el-table-column>
+    <el-table-column
       prop="_source.builtyear"
       label="건축년도"
       width="60%">
@@ -17,14 +29,6 @@
       prop="_source.yyyymmdd"
       label="거래일"
       width="90%">
-    </el-table-column>
-    <el-table-column
-      prop="_source.deposit"
-      label="보증금">
-    </el-table-column>
-    <el-table-column
-      prop="_source.rent"
-      label="월세">
     </el-table-column>
     </el-table>
   

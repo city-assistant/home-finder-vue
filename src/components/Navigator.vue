@@ -12,7 +12,7 @@
       ></el-autocomplete>
       <el-button type="primary" icon="el-icon-search" v-on:click="searchQuery">Search</el-button>
       <div id="filters">
-        <filter-items v-on:distanceUpdate="distanceUpdate" v-on:rentUpdate="rentUpdate" v-on:depositUpdate="depositUpdate" v-on:leaseTypeUpdate="leaseTypeUpdate"/>
+        <filter-items v-on:areaUpdate="areaUpdate" v-on:distanceUpdate="distanceUpdate" v-on:rentUpdate="rentUpdate" v-on:depositUpdate="depositUpdate" v-on:leaseTypeUpdate="leaseTypeUpdate"/>
       </div>
     </div>
     <IntermediateResult :searchResult="searchResult"/>
@@ -40,11 +40,15 @@ export default {
       distance: 5,
       deposit: [0, 25000],
       rent: [0, 100],
+      area: [10, 50],
       chosenPoint: [37.566409573096465, 126.97772421964528]
     }
   },
   components: { FilterItems, IntermediateResult, Map },
   methods: {
+    areaUpdate(val) {
+      this.areaUpdate = val;
+    },
     chosenPointUpdate(val) {
       this.chosenPoint = val;
     },
@@ -89,6 +93,13 @@ export default {
                 "range": {
                   "yyyymmdd": {
                     "gte": 20200000
+                  }
+                }
+              },{
+                "range": {
+                  "area": {
+                    "gte": this.area[0],
+                    "lte": this.area[1]
                   }
                 }
               },{
