@@ -15,7 +15,7 @@
         <filter-items v-on:areaUpdate="areaUpdate" v-on:distanceUpdate="distanceUpdate" v-on:rentUpdate="rentUpdate" v-on:depositUpdate="depositUpdate" v-on:leaseTypeUpdate="leaseTypeUpdate"/>
       </div>
     </div>
-    <IntermediateResult :searchResult="searchResult"/>
+    <IntermediateResult v-on:emitAddress="emphasizeMarker" :searchResult="searchResult"/>
     <Map :searchResult="searchResult" v-on:chosenPointUpdate="chosenPointUpdate"/>
   </div>
 </template>
@@ -46,6 +46,9 @@ export default {
   },
   components: { FilterItems, IntermediateResult, Map },
   methods: {
+    emphasizeMarker(val){
+      console.log(val);
+    },
     areaUpdate(val) {
       this.areaUpdate = val;
     },
