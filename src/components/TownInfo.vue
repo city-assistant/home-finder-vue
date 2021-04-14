@@ -1,7 +1,10 @@
 <template>
   <div id="townInfo" style="display:none">
       {{ chosenAddress }} <br><br>
+      <LineChart :passData='passSpecificData'/>
       <br><br>
+
+      해당 물건은 {{ currentData }} 평균보다 월세가 약 X% 저렴합니다.
 
       {{ currentData }} 정보<br><br>
 
@@ -26,15 +29,84 @@ export default {
     },
     data() {
         return {
-            passData: {}
+            passData: {},
+            passSpecificData: {}
         }
     },
     watch: {
         currentData: function(data) {
             this.getChartData(data)
+        },
+        chosenAddress: function(address) {
+            this.getSpecificChartData(this.currentData, address.substring(this.currentData.length + 1, address.length))
         }
     },
     methods: {
+        getSpecificChartData(city, road) {
+            axios.post('http://localhost:9200/officetel-rent-data/_search', {
+                "size": 0,
+                "sort": {
+                    "@timestamp": {
+                    "order": "asc"
+                    }
+                },
+                "query": {
+                    "bool": {
+                    "must": [
+                            {"match": {"시군구": city}},
+                            {"match": {"도로명": road}}
+                        ]
+                    }
+                }, 
+                "aggs": {
+                    "result": {
+                    "date_histogram": {
+                        "field": "@timestamp",
+                        "calendar_interval": "year",
+                        "format": "yyyy"
+                    },
+                    "aggs": {
+                        "면적": {
+                            "avg": {"field": "area"}},
+                            "보증금": {"avg": {"field": "deposit"}},
+                            "월세": {"avg": {"field": "rent"}},
+                            "10평당 월세": {
+                            "bucket_script": {
+                                "buckets_path": {
+                                "v1": "면적",
+                                "v2": "월세"
+                                },
+                                "script": "params.v2 / params.v1 * 33"
+                            }
+                                },
+                                "10평당 보증금": {
+                                "bucket_script": {
+                                    "buckets_path": {
+                                    "v1": "면적",
+                                    "v2": "보증금"
+                                    },
+                                    "script": "params.v2 / params.v1 * 33"
+                                }
+                            }
+                        }
+                    }
+                }
+            }).then(res => {
+                let labels = []
+                let tempData1 = {data:[], label:'10평당 보증금'}
+                let tempData2 = {data:[], label:'10평당 월세'}
+                for (let data of res.data.aggregations.result.buckets){
+                    labels.push(data.key_as_string)
+                    tempData1['data'].push(data['10평당 보증금'].value)
+                    tempData2['data'].push(data['10평당 월세'].value)
+                }
+
+                this.passSpecificData = {
+                    labels: labels,
+                    datasets: [tempData1, tempData2]
+                }
+            })
+        },
         getChartData(val) {
             axios.post('http://localhost:9200/officetel-rent-data/_search', {
                 "size": 0,
