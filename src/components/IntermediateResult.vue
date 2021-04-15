@@ -53,7 +53,15 @@ export default {
   },
   methods: {
     emitAddress(val){
-      this.$emit('emitAddress', val._source['시군구'] + ' ' + val._source['도로명'])
+      let returnString = val._source['시군구'];
+      if(val._source['도로명']) {
+        returnString += ' ' + val._source['도로명']
+      }
+      // if(val._source['건물명']) {
+      //   returnString += ' ' + val._source['건물명']
+      // }
+      returnString += '&' + val._source['시군구'];
+      this.$emit('emitAddress', returnString)
     }
   }
 }

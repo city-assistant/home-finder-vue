@@ -2,7 +2,7 @@
   <div id="app">
     <NavBar/>
     <div id="nav">
-      <Navigator :searchResult="searchResult"/>
+      <Navigator/>
     </div>
     <router-view/>
   </div>
@@ -19,7 +19,6 @@ export default {
   name: 'App',
   data() {
     return {
-      searchResult: ''
     }
   },
   components: {

@@ -30,7 +30,6 @@ import axios from 'axios';
 export default {
   name: "Sidebar",
   props: {
-    searchResult: String
   },
   data() {
     return {
@@ -42,7 +41,8 @@ export default {
       rent: [0, 100],
       area: [10, 50],
       chosenPoint: [37.566409573096465, 126.97772421964528],
-      emphasizedMarker: ''
+      emphasizedMarker: '',
+      searchResult: []
     }
   },
   components: { FilterItems, IntermediateResult, Map },
