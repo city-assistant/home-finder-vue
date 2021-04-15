@@ -1,6 +1,6 @@
 <template>
   <div class="navBar">
-    <button v-if="login" v-on:click="myPage">
+    <button v-if="logIn" v-on:click="myPage">
       user
     </button>
     <button v-else v-on:click="login">
@@ -29,17 +29,17 @@ export default {
     return {
       showModal: false,
       logIn: false,
-      currentUrl: document.location
     }
   },
   watch: {
-    currentUrl: function() {
-      if (this.$cookie.get('userToken') != '') {
+    $route(to, from) {
+      console.log(to, from); 
+      if (this.$cookies.get('userToken') != null) {
         this.logIn = true;
       } else {
-        this.login = false;
+        this.logIn = false;
       }
-    }
+    },
   },
   methods: {
     about() {

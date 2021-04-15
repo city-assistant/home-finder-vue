@@ -10,10 +10,11 @@
 
 <script>
 export default {
+  name: 'MyPage',
   methods: {
     logOut() {
-      console.log('a');
-      this.$cookies.set('userToken', '');
+      this.$cookies.remove('userToken');
+      alert('로그아웃 되었습니다')
       this.$router.push('/');
     }
   }

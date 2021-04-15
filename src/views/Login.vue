@@ -4,9 +4,7 @@
     로그인 페이지<br>
     <input type="text" v-model="currentId"><br>
     <input type="text" v-model="currentPw"><br>
-    <button v-on:click="login">login
-
-    </button>
+    <button v-on:click="login">login</button>
   </div>
 </template>
 
