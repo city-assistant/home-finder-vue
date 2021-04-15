@@ -6,8 +6,11 @@
     <button v-else v-on:click="login">
       login
     </button>
-    <button @click="showModal = true">
+    <button v-on:click="about">
       About
+    </button>
+    <button v-on:click="goHome">
+      Home
     </button>
     <vmodal/>
   </div>
@@ -17,7 +20,6 @@
 
 <script>
 import vmodal from 'vue-js-modal'
-import store from '../store/store';
    
 export default {
   components: {
@@ -26,23 +28,32 @@ export default {
   data() {
     return {
       showModal: false,
-      logIn: false
+      logIn: false,
+      currentUrl: document.location
     }
   },
-  created() {
-    if (this.$cookie.get('userToken')) {
-      this.logIn = true;
-    } else {
-      this.login = false;
+  watch: {
+    currentUrl: function() {
+      if (this.$cookie.get('userToken') != '') {
+        this.logIn = true;
+      } else {
+        this.login = false;
+      }
     }
   },
   methods: {
+    about() {
+      this.$router.push("/about")
+    },
     login() {
-      this.$router.push(store.state.BACK_SERVER_LOCAL + 'login')
+      this.$router.push("/login")
     },
     myPage() {
-      this.$router.push(store.state.BACK_SERVER_LOCAL + 'mypage')
+      this.$router.push('/mypage')
     },
+    goHome() {
+      this.$router.push('/')
+    }
   }
 }
 </script>
