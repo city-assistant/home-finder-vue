@@ -2,29 +2,35 @@
  <div id="IntermediateResult">
     <el-table
     v-if="searchResult.length !=0"
-    :data="searchResult"
+    :data="newResult"
     height="650"
     style="width: 100%">
       <el-table-column>
         <template slot-scope="{ row }">
           <el-col>
             <el-button @click="emitAddress(row)">
-              쳌
+              선택
             </el-button>
           </el-col>
         </template>
       </el-table-column>
+    <el-table-column 
+        prop="_source.단지명"
+        label="단지명">
+    </el-table-column>
       <el-table-column
         prop="_source.deposit"
-        label="보증금">
+        label="보증금(만원)">
       </el-table-column>
       <el-table-column
         prop="_source.rent"
-        label="월세">
+        label="월세(만원)"
+        width="60%">
       </el-table-column>
       <el-table-column
         prop="_source.area"
-        label="면적">
+        label="면적"
+        width="60%">
       </el-table-column>
       <el-table-column
         prop="_source.builtyear"
@@ -48,21 +54,22 @@ export default {
   },
   data() {
     return {
-      chosenAddress: ''
+      chosenAddress: '',
+      newResult: [],
     }
   },
+  
   methods: {
     emitAddress(val){
-      let returnString = val._source['시군구'];
-      if(val._source['도로명']) {
-        returnString += ' ' + val._source['도로명']
-      }
-      // if(val._source['건물명']) {
-      //   returnString += ' ' + val._source['건물명']
-      // }
-      returnString += '&' + val._source['시군구'];
-      this.$emit('emitAddress', returnString)
-    }
-  }
+      this.$emit('emitAddress', val._source['시군구'] + ' ' + val._source['도로명'])
+    },
+    // 중복 제거
+   
+  },
+  beforeCreate(){
+    console.log("값이잇나11")
+    // this.mappingQuery();
+  },
+  
 }
 </script>
