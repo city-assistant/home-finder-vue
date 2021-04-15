@@ -1,5 +1,28 @@
 <template>
   <div id="townInfo" style="display:none">
+      전월세 전환률 설정 (%)
+        <div class="block">
+          <el-slider
+            style="margin: 10px"
+            v-model="transferRatio"
+            step="0.1"
+            show-stops
+            :max="10">
+          </el-slider>
+        </div>
+      <LineChart :passData='translatedData'/>
+      가용 보증금
+        <div class="block">
+          <el-slider
+            style="margin: 10px"
+            v-model="possibleDeposit"
+            step="100"
+            show-stops
+            :max="10000">
+          </el-slider>
+        </div>
+        예상 필요 월세 : {{ needRent }}
+        <br><br>
       {{ chosenAddress }} <br><br>
       <LineChart :passData='passSpecificData'/>
       <br><br>
@@ -30,18 +53,45 @@ export default {
     data() {
         return {
             passData: {},
-            passSpecificData: {}
+            passSpecificData: {},
+            translatedData: {},
+            possibleDeposit: 2000,
+            transferRatio: 5,
+            needRent: 0
         }
     },
     watch: {
+        possibleDeposit: function(data) {
+            console.log(this.translatedData);
+            this.needRent = parseInt(this.translatedData.datasets[0].data[this.translatedData.datasets[0].data.length-1] - data * (this.transferRatio * 0.01 / 12))
+        },
+        transferRatio: function(data) {
+            this.updateTranslatedData(data);
+        },
         currentData: function(data) {
             this.getChartData(data)
+            this.updateTranslatedData(this.transferRatio);
         },
         chosenAddress: function(address) {
             this.getSpecificChartData(this.currentData, address.substring(this.currentData.length + 1, address.length))
         }
     },
     methods: {
+        updateTranslatedData(data) {
+            let i = 0
+            let labels = []
+            let tempData = []
+            for (let temp of this.passData.datasets[0].data) {
+                temp
+                labels.push(this.passData.labels[i])
+                tempData.push(this.passData.datasets[0].data[i] * (data * 0.01 / 12) + this.passData.datasets[1].data[i])
+                i++;
+            }
+            this.translatedData = {
+                labels: labels,
+                datasets: [{data:tempData, label:'전월세 전환'}]
+            }
+        },
         getSpecificChartData(city, road) {
             axios.post('http://localhost:9200/officetel-rent-data/_search', {
                 "size": 0,
