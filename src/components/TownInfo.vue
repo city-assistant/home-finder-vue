@@ -1,6 +1,6 @@
 <template>
   <div id="townInfo" style="display:none">
-      전월세 전환률 설정 (%)
+      전월세 전환률 설정 : {{ transferRatio }}%
         <div class="block">
           <el-slider
             style="margin: 10px"
@@ -11,7 +11,7 @@
           </el-slider>
         </div>
       <LineChart :passData='translatedData'/>
-      가용 보증금
+      가용 보증금 : {{ possibleDeposit }} 만원
         <div class="block">
           <el-slider
             style="margin: 10px"
@@ -70,7 +70,6 @@ export default {
         },
         currentData: function(data) {
             this.getChartData(data)
-            this.updateTranslatedData(this.transferRatio);
         },
         chosenAddress: function(address) {
             this.getSpecificChartData(this.currentData, address.substring(this.currentData.length + 1, address.length))
@@ -91,6 +90,7 @@ export default {
                 labels: labels,
                 datasets: [{data:tempData, label:'전월세 전환'}]
             }
+            this.needRent = parseInt(this.translatedData.datasets[0].data[this.translatedData.datasets[0].data.length-1] - this.possibleDeposit * (this.transferRatio * 0.01 / 12))
         },
         getSpecificChartData(city, road) {
             axios.post('http://localhost:9200/officetel-rent-data/_search', {
@@ -221,6 +221,7 @@ export default {
                     labels: labels,
                     datasets: [tempData1, tempData2]
                 }
+                this.updateTranslatedData(this.transferRatio);
             })
         }
     },
