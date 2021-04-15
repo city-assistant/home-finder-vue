@@ -15,8 +15,8 @@
         <filter-items v-on:areaUpdate="areaUpdate" v-on:distanceUpdate="distanceUpdate" v-on:rentUpdate="rentUpdate" v-on:depositUpdate="depositUpdate" v-on:leaseTypeUpdate="leaseTypeUpdate"/>
       </div>
     </div>
-    <IntermediateResult v-on:emitAddress="emphasizeMarker" :searchResult="searchResult"/>
-    <Map :emphasizedMarker="emphasizedMarker" :searchResult="searchResult" v-on:chosenPointUpdate="chosenPointUpdate" />
+    <IntermediateResult v-on:emitAddress="emphasizeMarker" :searchResult="newResult"/>
+    <Map :searchResult="searchResult" v-on:chosenPointUpdate="chosenPointUpdate"/>
   </div>
 </template>
 
@@ -42,7 +42,7 @@ export default {
       rent: [0, 100],
       area: [10, 50],
       chosenPoint: [37.566409573096465, 126.97772421964528],
-      emphasizedMarker: ''
+      newResult: []
     }
   },
   components: { FilterItems, IntermediateResult, Map },
@@ -127,20 +127,11 @@ export default {
       }).then(res => { 
         console.log(res.data.hits.hits)
         this.searchResult = res.data.hits.hits
+        this.mappingQuery();
       })
     },
     searchArround() {
       
-    },
-    // 중복 제거
-    mappingQuery() {
-      for(let i = 0; i < this.searchResult.length; i++ ){
-      if(this.searchResult.indexOf(this.searchResult._source.단지명) != -1){
-        console.log("값이잇나")
-           this.searchResult.push(this.searchResult[i])
-        }
-      }
-      return this.searchResult;
     },
     querySearch(queryString, cb) {
         var results = this.links.filter((el) => {
@@ -180,6 +171,30 @@ export default {
     handleSelect(item) {
       console.log(item);
     },
+     mappingQuery() {
+      // for (var i=0; i<arr.length; i++) {
+      //   if (uniqueArr.indexOf(arr[i]) === -1) uniqueArr.push(arr[i]);
+      // }
+       
+      for(let index in this.searchResult ){
+        console.log(index)
+        // console.log(this.newResult.indexOf(index._source.단지명))
+
+        if(this.newResult.indexOf(this.searchResult[index]._source.단지명) == -1){
+          console.log("값이잇나33")
+            this.newResult.push(this.searchResult[index]._source.단지명)
+          }
+        }
+        
+        
+        // if(this.newResult[index].indexOf(this.searchResult[index]._source.단지명) == -1){
+        //   console.log("값이잇나33")
+        //     this.newResult.push(index)
+        //   }
+        // }
+      console.log(this.newResult)
+      // return this.newResult;
+    }
   },
   mounted() {
     this.loadAll();
