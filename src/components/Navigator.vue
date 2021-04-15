@@ -143,18 +143,10 @@ export default {
       return this.searchResult;
     },
     querySearch(queryString, cb) {
-      var links = this.links;
-      var results = queryString
-        ? links.filter(this.createFilter(queryString))
-        : links;
+        var results = this.links.filter((el) => {
+          return el.value.match(queryString);
+        });
       cb(results);
-    },
-    createFilter(queryString) {
-      return (link) => {
-        return (
-          link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
-        );
-      };
     },
     loadAll() {
       axios
