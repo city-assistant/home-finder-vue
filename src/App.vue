@@ -1,9 +1,6 @@
 <template>
   <div id="app">
     <NavBar/>
-    <div id="nav">
-      <Navigator/>
-    </div>
     <router-view/>
   </div>
 </template>
@@ -12,7 +9,6 @@
 </style>
 
 <script>
-import Navigator from './components/Navigator';
 import NavBar from './components/NavBar';
 
 export default {
@@ -22,7 +18,6 @@ export default {
     }
   },
   components: {
-    Navigator, 
     NavBar
   }
 }

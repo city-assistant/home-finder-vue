@@ -27,7 +27,7 @@
       <LineChart :passData='passSpecificData'/>
       <br><br>
 
-      해당 물건은 {{ currentData }} 평균보다 월세가 약 X% 저렴합니다.
+      해당 물건은 {{ currentData }} 평균보다 월세가 약 {{ cheaper }}% 저렴할 것으로 예상됩니다.
 
       {{ currentData }} 정보<br><br>
 
@@ -57,7 +57,8 @@ export default {
             translatedData: {},
             possibleDeposit: 2000,
             transferRatio: 5,
-            needRent: 0
+            needRent: 0,
+            cheaper: 0
         }
     },
     watch: {
