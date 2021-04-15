@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1>This is an MyPage page</h1>
+    <br><br><br>
+    This is an MyPage page
   </div>
 </template>
 

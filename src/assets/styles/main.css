@@ -20,7 +20,6 @@ body {
   top: 0;
   width: 100%;
   height: 50px;
-  background-color: aliceblue;
   z-index: 6;
 }
 
@@ -31,11 +30,16 @@ body {
   margin-left: 5px;
 }
 
-.navBar #userManage {
+.navBar button {
+  text-align: center;
   float: right;
-  font-size: large;
+  font-size: small;
+  background-color: #ffffff;
   margin-top: 15px;
-  margin-right: 5px;
+  margin-right: 15px;
+  width: 50px;
+  height: 50px;
+  border: 5px;
 }
 
 .sidebar {
