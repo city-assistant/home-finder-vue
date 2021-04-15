@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <br><br><br>
+  <div id="myPage">
+    <br><br><br><br><br><br>
     This is an MyPage page
     <button v-on:click="logOut">
       logout
@@ -11,6 +11,9 @@
 <script>
 export default {
   name: 'MyPage',
+  created: function() {
+
+  },
   methods: {
     logOut() {
       this.$cookies.remove('userToken');
