@@ -19,7 +19,7 @@ body {
   position: absolute;
   top: 0;
   width: 100%;
-  height: 50px;
+  height: 100px;
   z-index: 6;
 }
 
@@ -39,7 +39,7 @@ body {
   margin-right: 15px;
   width: 50px;
   height: 50px;
-  border: 5px;
+  border-radius: 10px;
 }
 
 .sidebar {
@@ -47,7 +47,7 @@ body {
   float : left;
   background-color: #ffffff;
 	width : 250px;
-  top: 60px;
+  top: 15px;
   left: 10px;
   z-index:2;
   box-shadow: #2c3e50;
@@ -74,14 +74,15 @@ color: #42b983;
 }
 
 #townInfo {
+  border-radius: 20px;
   position: absolute;
   float : left;
   background-color: #ffffff;
   align-items: center;
   align-content: center;
 	width : 250px;
-  height: 50%;
-  top: 47%;
+  height: 72%;
+  top: 25%;
   left: 10px;
   z-index: 1;
   transition: 1s;
@@ -101,4 +102,21 @@ color: #42b983;
 /* chart */
 .small {
   width: 22vh;
+}
+
+#logInPage {
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+#logInPage #logInBox {
+  position: relative;
+  top: 40%;
+  height: 20%;
+}
+
+@media (max-width: 1023px) {
+  
 }

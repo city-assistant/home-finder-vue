@@ -1,28 +1,29 @@
 <template>
   <div class="filter">
-    <h5>소요시간(준비중)</h5>
-    <!-- 목적지까지 소요시간 -->
-    <el-input-number
-      v-model="num"
-      @change="handleChange"
-      :min="15"
-      :max="90"
-      :step="15"
-      size="small"
-    ></el-input-number>
-
-    <h5>거리 (해당 km 이하)</h5>
-    <el-input-number
-      v-model="distance"
-      @change="handleChange"
-      :min="0"
-      :max="30"
-      :step="1"
-      size="small"
-    ></el-input-number>
-
     <el-menu default-active="true" background-color="#ffffff">
       <el-submenu index="">
+        <h5>소요시간(준비중)</h5>
+        <!-- 목적지까지 소요시간 -->
+        <el-input-number
+          v-model="num"
+          @change="handleChange"
+          :min="15"
+          :max="90"
+          :step="15"
+          size="small"
+        ></el-input-number>
+
+        <h5>거리 (해당 km 이하)</h5>
+        <el-input-number
+          v-model="distance"
+          @change="handleChange"
+          :min="0"
+          :max="30"
+          :step="1"
+          size="small"
+        ></el-input-number>
+
+
         <!-- 주거 형태 -->
         <div style="margin-top: 20px">
           <el-radio-group v-model="homeType" size="small">
