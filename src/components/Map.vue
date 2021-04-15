@@ -8,6 +8,7 @@
 <script>
 import axios from 'axios';
 import townInfo from './TownInfo.vue';
+import constant from '../store/constant';
 
 export default {
   props: {
@@ -67,7 +68,7 @@ export default {
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
       script.src =
-        "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=6e5e29693162c801d9dcaf92ac0e2c7e&libraries=services,clusterer,drawing";
+        "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=" + constant.state.KAKAO_MAP_API_KEY + "&libraries=services,clusterer,drawing";
       document.head.appendChild(script);
       this.geocoder = new kakao.maps.services.Geocoder()
     },
