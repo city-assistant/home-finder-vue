@@ -1,7 +1,9 @@
 <template>
 
  <div id="IntermediateResult">
+  
    <el-table
+    v-if="this.officeName.length != 0"
     :data="officeName"
     style="width: 100%"
     @current-change="handleCurrentChange"

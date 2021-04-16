@@ -2,10 +2,23 @@
   <div>
       <br>동별 분석자료
       <br><br><br><br>
-      <input type="text" v-model="city">
+      <div class="searchReprt">
+      <el-autocomplete
+        class="inline-input"
+        v-model="city"
+        :fetch-suggestions="querySearch"
+        placeholder="한정지을 지역(선택)"
+        :trigger-on-focus="false"
+        @select="handleSelect"
+      ></el-autocomplete>
+      <el-button type="primary" icon="el-icon-search" v-on:click="getData"
+        >Search</el-button
+      >
+      </div>
+      <!-- <input type="text" v-model="city">
       <button v-on:click="getData">검색</button><br>
-      <!-- <button v-on:click="getAllCities">getAllCities</button> -->
-      {{ city }}
+      <button v-on:click="getAllCities">getAllCities</button>
+      {{ city }} -->
       <LineChart :passData="passData"/>
       <button v-on:click="saveData">분석 리포트 다운로드</button>
   </div>
@@ -22,7 +35,7 @@ export default {
   },
   data() {
     return {
-      city: "서울특별시 강서구 마곡동",
+      city: "",
       passData: {},
       allCitys: [],
       allDatas: {}
@@ -61,7 +74,7 @@ export default {
         })
         .then((res) => {
           res.data.aggregations.group_by_state.buckets.map((val) => {
-            this.allCitys.push(val.key);
+            this.allCitys.push({value: val.key });
           });
         });
     },
@@ -125,8 +138,48 @@ export default {
                   datasets: [{data:datas, label:'10평 합계지수'}]
                 }
             })
+          },
+          //  loadAll() {
+          //     axios
+          //       .post("http://localhost:9200/officetel-rent-data/_search", {
+          //         size: 0,
+          //         query: {
+          //           prefix: {
+          //             시군구: {
+          //               value: "서울",
+          //             },
+          //           },
+          //         },
+          //         aggs: {
+          //           group_by_state: {
+          //             terms: {
+          //               size: 10000000,
+          //               field: "시군구",
+          //             },
+          //           },
+          //         },
+          //       })
+          //       .then((res) => {
+          //         console.log(res.data.aggregations.group_by_state.buckets);
+          //         res.data.aggregations.group_by_state.buckets.map((val) => {
+          //           this.links.push({ value: val.key });
+          //         });
+          //       });
+          //   },
+            querySearch(queryString, cb) {
+              var results = this.allCitys.filter((el) => {
+                return el.value.match(queryString);
+              });
+              cb(results);
+            },
+            handleSelect(item) {
+            console.log(item);
+            },
+  },
+    mounted(){
+      // this.loadAll();
+      this.getAllCities();
     }
-  }
 }
 </script>
 
