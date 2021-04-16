@@ -1,4 +1,5 @@
 <template>
+
  <div id="IntermediateResult">
    <el-table
     :data="officeName"

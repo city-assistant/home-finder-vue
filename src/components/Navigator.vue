@@ -188,26 +188,26 @@ export default {
     handleSelect(item) {
       console.log(item);
     },
-    mappingQuery() {
-      this.officeName = []
-      this.newOfficeName = []
+     mappingQuery() {
+       //초기화
+      this.officeName = [];
+      this.newOfficeName = [];
 
-      for (let index in this.searchResult) {
-        if (this.officeName.indexOf(this.searchResult[index]._source.단지명) == -1) {
-          this.officeName.push(this.searchResult[index]._source.단지명);
+      //중복제거
+      for(let index in this.searchResult ){
+        if(this.officeName.indexOf(this.searchResult[index]._source.단지명) == -1){
+            this.officeName.push(this.searchResult[index]._source.단지명)
+          }
         }
-      }
+        console.log(this.officeName)
+      //key값 지정
       for(let item in this.officeName){
-          this.newOfficeName.push({value:this.officeName[item]})
+          if(this.officeName[item] != undefined){
+            this.newOfficeName.push({value:this.officeName[item]})
+          }
       }
-      console.log(this.newOfficeName)
-
-      // for(let item in this.searchResult){
-      //     this.newOfficeName.value[item].push({key: this.searchResult._source})
-      // }
-      // console.log(this.)
-
-    },
+       console.log(this.newOfficeName)
+    }
   },
   mounted() {
     this.loadAll();
