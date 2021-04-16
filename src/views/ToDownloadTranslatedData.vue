@@ -3,11 +3,11 @@
       <br>동별 분석자료
       <br><br><br><br>
       <input type="text" v-model="city">
-      <button v-on:click="getData">검색</button><br>
-      <!-- <button v-on:click="getAllCities">getAllCities</button> -->
+      <button v-on:click="getData">aaa</button><br>
+      <button v-on:click="getAllCities">getAllCities</button>
+      <button v-on:click="saveData">saveData</button>
       {{ city }}
       <LineChart :passData="passData"/>
-      <button v-on:click="saveData">분석 리포트 다운로드</button>
   </div>
 </template>
 
@@ -63,6 +63,10 @@ export default {
           res.data.aggregations.group_by_state.buckets.map((val) => {
             this.allCitys.push(val.key);
           });
+          for (let city of this.allCitys) {
+            this.city = city
+            this.getData();
+          }
         });
     },
     getData: function() {
@@ -120,10 +124,10 @@ export default {
                 console.log(passCity);
 
                 this.allDatas[passCity] = {labels: labels, datas: datas}
-                this.passData = {
-                  labels: labels,
-                  datasets: [{data:datas, label:'10평 합계지수'}]
-                }
+                // this.passData = {
+                //   labels: labels,
+                //   datasets: [{data:datas, label:'10평 합계지수'}]
+                // }
             })
     }
   }
