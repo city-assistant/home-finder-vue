@@ -1,6 +1,8 @@
 <template>
   <div id="townInfo" style="display:none">
       전월세 전환률 설정 : {{ transferRatio }}%
+      https://kosis.kr/statHtml/statHtml.do?orgId=408&tblId=DT_30404_N0010
+      참고
         <div class="block">
           <el-slider
             style="margin: 10px"
@@ -89,7 +91,7 @@ export default {
             }
             this.translatedData = {
                 labels: labels,
-                datasets: [{data:tempData, label:'전월세 전환'}]
+                datasets: [{data:tempData, label:'합계 지수(월 만원)'}]
             }
             this.needRent = parseInt(this.translatedData.datasets[0].data[this.translatedData.datasets[0].data.length-1] - this.possibleDeposit * (this.transferRatio * 0.01 / 12))
         },

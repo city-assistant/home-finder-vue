@@ -87,6 +87,7 @@ export default {
           var message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
           message += '경도는 ' + latlng.getLng() + ' 입니다';
           console.log(message);
+          this.geocoder.
           this.chosenPoint = [latlng.getLat(), latlng.getLng()]
       });
 
@@ -127,13 +128,17 @@ export default {
     },
     getLocationGeo(city) {
       axios.post('http://localhost:9200/korea-geojson-data/_search',{
-          "size": 1,
-          "query": {
-            "match": {
-              "adm_nm": city
+        "size": 10,
+        "query": {
+          "prefix": {
+            "adm_nm.keyword": {
+              "value": city.split(' ')[0] + ' ' + city.split(' ')[1] + ' ' + city.split(' ')[2][0] + city.split(' ')[2][1]
             }
           }
+        }
       }).then(res => {
+        console.log(res.data);
+        console.log(city.split(' ')[0] + ' ' + city.split(' ')[1] + ' ' + city.split(' ')[2][0] + city.split(' ')[2][1]);
         let polygonPath = []
         for (let point of res.data.hits.hits[0]._source.coordinates.coordinates[0][0]) {
           console.log(typeof(point[0]));
