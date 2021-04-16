@@ -9,7 +9,7 @@
             <template slot-scope="{ row }">
               <el-col>
                 <el-button @click="emitAddress(row)">
-                  {{선택}}
+                  선택
                 </el-button>
               </el-col>
             </template>

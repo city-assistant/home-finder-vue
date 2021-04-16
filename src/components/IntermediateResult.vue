@@ -15,8 +15,8 @@
     </el-table-column>
 
     <el-table-column
-      label="평균가?"
-      prop="avg">
+      label="지역명"
+      prop="addr">
     </el-table-column>
 
     <el-table-column type="expand">

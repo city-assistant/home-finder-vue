@@ -56,6 +56,7 @@ export default {
       area: [10, 50],
       chosenPoint: [37.566409573096465, 126.97772421964528],
       officeName: [],
+      officeAddr: [],
       newOfficeName: [],
     };
   },
@@ -191,19 +192,21 @@ export default {
      mappingQuery() {
        //초기화
       this.officeName = [];
+      this.officeAddr = []
       this.newOfficeName = [];
 
       //중복제거
       for(let index in this.searchResult ){
         if(this.officeName.indexOf(this.searchResult[index]._source.단지명) == -1){
             this.officeName.push(this.searchResult[index]._source.단지명)
+            this.officeAddr.push(this.searchResult[index]._source.시군구.split(' '));
           }
         }
         console.log(this.officeName)
       //key값 지정
       for(let item in this.officeName){
           if(this.officeName[item] != undefined){
-            this.newOfficeName.push({value:this.officeName[item]})
+            this.newOfficeName.push({value:this.officeName[item], addr: this.officeAddr[item][this.officeAddr[item].length-1]})
           }
       }
        console.log(this.newOfficeName)
