@@ -4,7 +4,6 @@
       v-if="this.officeName.length != 0"
       :data="officeName"
       style="width: 100%"
-      @current-change="handleCurrentChange"
     >
       <el-table-column>
         <template slot-scope="{ row }">
@@ -21,10 +20,11 @@
       <el-table-column label="지역명" prop="addr"> </el-table-column>
 
       <el-table-column type="expand">
+        <template slot-scope="scope">
         <intermediate-result-list
-          :searchResult="searchResult"
-          :officeName="newOfficeName"
-        />
+        :searchResult="searchResult"
+        :officeName="scope.row.value"/>
+      </template>
       </el-table-column>
     </el-table>
   </div>
@@ -47,10 +47,6 @@ export default {
     };
   },
   methods: {
-    handleCurrentChange(val) {
-      this.currentRowObject = val;
-      console.log(val);
-    },
     emitAddress(val) {
       this.$emit(
         "emitAddress",
