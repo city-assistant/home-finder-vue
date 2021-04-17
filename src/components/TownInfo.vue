@@ -1,8 +1,7 @@
 <template>
   <div id="townInfo" style="display:none">
       전월세 전환률 설정 : {{ transferRatio }}%
-      https://kosis.kr/statHtml/statHtml.do?orgId=408&tblId=DT_30404_N0010
-      참고
+      <!-- https://kosis.kr/statHtml/statHtml.do?orgId=408&tblId=DT_30404_N0010 참고 -->
         <div class="block">
           <el-slider
             style="margin: 10px"
@@ -12,7 +11,7 @@
             :max="10">
           </el-slider>
         </div>
-      <LineChart :passData='translatedData'/>
+      <BarChart :passData='translatedData'/>
       가용 보증금 : {{ possibleDeposit }} 만원
         <div class="block">
           <el-slider
@@ -25,12 +24,6 @@
         </div>
         예상 필요 월세 : {{ needRent }}
         <br><br>
-      {{ chosenAddress }} <br><br>
-      <LineChart :passData='passSpecificData'/>
-      <br><br>
-
-      해당 물건은 {{ currentData }} 평균보다 월세가 약 {{ cheaper }}% 저렴할 것으로 예상됩니다.
-
       {{ currentData }} 정보<br><br>
 
       상권이나 근린, 역, 편의점 등의 정보도 긁어오자
@@ -42,15 +35,15 @@
 
 <script>
 import LineChart from './charts/LineChart'
+import BarChart from './charts/BarChart'
 import axios from 'axios';
 
 export default {
     components: {
-        LineChart
+        LineChart, BarChart
     },
     props: {
-        currentData: String,
-        chosenAddress: String
+        currentData: String
     },
     data() {
         return {

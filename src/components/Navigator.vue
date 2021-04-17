@@ -10,7 +10,7 @@
         :trigger-on-focus="false"
         @select="handleSelect"
       ></el-autocomplete>
-      <el-button type="primary" icon="el-icon-search" v-on:click="searchQuery"
+      <el-button type="primary" icon="el-icon-search" v-on:click="searchCities"
         >Search</el-button
       >
       <div id="filters">
@@ -30,7 +30,9 @@
     />
     <Map
       :searchResult="searchResult"
+      :searchCitiesResult="searchCitiesResult"
       v-on:chosenPointUpdate="chosenPointUpdate"
+      v-on:currentDataUpdate="currentDataUpdate"
     />
   </div>
 </template>
@@ -51,17 +53,21 @@ export default {
       searchAddress: "",
       leaseType: "월세",
       distance: 5,
-      deposit: [0, 25000],
-      rent: [0, 100],
-      area: [10, 50],
+      deposit: [0, 5000],
+      rent: [0, 50],
+      area: 30,
       chosenPoint: [37.566409573096465, 126.97772421964528],
       officeName: [],
       officeAddr: [],
       newOfficeName: [],
+      searchCitiesResult: []
     };
   },
   components: { FilterItems, IntermediateResult, Map },
   methods: {
+    currentDataUpdate(val) {
+      this.searchQuery(val)
+    },
     emphasizeMarker(val) {
       this.emphasizedMarker = val;
     },
@@ -83,71 +89,82 @@ export default {
     rentUpdate(val) {
       this.rent = val;
     },
-    searchQuery() {
-      axios
-        .post("http://localhost:9200/officetel-rent-data/_search", {
+    searchCities() {
+      let translatedMin = ((this.rent[0] + this.deposit[0] * 0.05 / 12) * 33 / this.area);
+      let translatedMax = ((this.rent[1] + this.deposit[1] * 0.05 / 12) * 33 / this.area);
+      axios.post("http://localhost:9200/officetel-rent-data/_search", {
+        "size": 0,
+        "query": {
+          "bool": {
+            "must": [
+              {"prefix": {"시군구": this.searchAddress}},
+              {"match": {"전월세구분": this.leaseType}}
+            ],
+            "filter": [{"range": {"yyyymmdd": {"gte": 20200000}}},
+              {
+                "geo_distance": {
+                  "distance": this.distance + "km",
+                  "location": {
+                    "lat": this.chosenPoint[0],
+                    "lon": this.chosenPoint[1],
+                  },
+                },
+              }
+            ]
+          }
+        },
+        "aggs": {"group_by_state": {"terms": {"size": 10000000,"field": "시군구"},
+            "aggs": {
+              "location": {"geo_bounds": {"field": "location"}},
+              "면적": {"avg": {"field": "area"}},
+              "보증금": {"avg": {"field": "deposit"}},
+              "월세": {"avg": {"field": "rent"}},
+              "translated": {
+                "bucket_script": {
+                  "buckets_path": {
+                    "v1": "면적",
+                    "v2": "월세",
+                    "v3": "보증금"
+                  },
+                  "script": "(params.v2 + params.v3 * 0.06 /12) / params.v1 * 33"
+                }
+              },
+              "필터": {
+                "bucket_selector": {
+                  "buckets_path": {
+                    "v1": "translated"
+                  },
+                  "script": translatedMin + " < params.v1" + " && " + "params.v1 < " + translatedMax
+                }
+              }
+            }
+          }
+        }
+      }).then(res => {
+        this.searchCitiesResult = res.data.aggregations.group_by_state.buckets;
+      })
+    },
+    searchQuery(val) {
+      axios.post("http://localhost:9200/officetel-rent-data/_search", {
           size: 1000,
           query: {
             bool: {
               must: [
                 {
                   prefix: {
-                    시군구: this.searchAddress,
-                  },
+                    시군구: val,
+                  }
                 },
                 {
                   match: {
                     전월세구분: this.leaseType,
-                  },
+                  }
                 },
-              ],
-              filter: [
-                {
-                  geo_distance: {
-                    distance: this.distance + "km",
-                    location: {
-                      lat: this.chosenPoint[0],
-                      lon: this.chosenPoint[1],
-                    },
-                  },
-                },
-                {
-                  range: {
-                    yyyymmdd: {
-                      gte: 20200000,
-                    },
-                  },
-                },
-                {
-                  range: {
-                    area: {
-                      gte: this.area[0],
-                      lte: this.area[1],
-                    },
-                  },
-                },
-                {
-                  range: {
-                    deposit: {
-                      gte: this.deposit[0],
-                      lte: this.deposit[1],
-                    },
-                  },
-                },
-                {
-                  range: {
-                    rent: {
-                      gte: this.rent[0],
-                      lte: this.rent[1],
-                    },
-                  },
-                },
-              ],
-            },
-          },
+              ]
+            }
+          }
         })
         .then((res) => {
-          console.log(res.data.hits.hits);
           this.searchResult = res.data.hits.hits;
           this.mappingQuery();
         });

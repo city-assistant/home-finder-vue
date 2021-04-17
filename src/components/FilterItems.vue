@@ -9,7 +9,7 @@
           @change="handleChange"
           :min="15"
           :max="90"
-          :step="15"
+          :step="timeStep"
           size="small"
         ></el-input-number>
 
@@ -47,9 +47,9 @@
           <el-slider
             style="margin: 10px"
             v-model="area"
-            step="10"
-            range
+            :step="areaStep"
             show-stops
+            :min="10"
             :max="200"
           >
           </el-slider>
@@ -60,7 +60,7 @@
           <el-slider
             style="margin: 10px"
             v-model="deposit"
-            step="1000"
+            :step="depositStep"
             range
             show-stops
             :max="30000"
@@ -72,7 +72,7 @@
           <el-slider
             style="margin: 10px"
             v-model="rent"
-            step="10"
+            :step="rentStep"
             range
             show-stops
             :max="200"
@@ -89,13 +89,13 @@ export default {
   data() {
     return {
       distance: 5,
-      rentStep: 10,
+      rentStep: 10, depositStep: 100, areaStep: 10, timeStep: 1,
       num: 15,
       homeType: "오피스텔",
       leaseType: "월세",
-      deposit: [0, 25000],
-      rent: [0, 100],
-      area: [10, 50]
+      deposit: [0, 5000],
+      rent: [0, 50],
+      area: 30
     };
   },
   watch: {

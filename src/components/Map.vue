@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="map" class="map"></div>
-    <town-info :currentData="currentData" :chosenAddress="chosenAddress"/>
+    <town-info :currentData="currentData"/>
   </div>
 </template>
 
@@ -13,6 +13,7 @@ import constant from '../store/constant';
 export default {
   props: {
     searchResult: Array,
+    searchCitiesResult: Array,
     emphasizedMarker: String
   },
   components: {
@@ -33,6 +34,7 @@ export default {
     window.kakao && window.kakao.maps
       ? this.initMap()
       : this.addKakaoMapScript();
+      
   },
   watch: {
     emphasizedMarker: function(val){
@@ -42,13 +44,23 @@ export default {
       this.$emit("chosenPointUpdate", val)
     },
     currentData: function(val) {
-      console.log(val);
+      this.$emit("currentDataUpdate", val)
+    },
+    searchCitiesResult: function(val) {
+      this.markerList.map((marker) => marker.setMap(null));
+      this.markerList = []
+        for (let data of val) {
+          if (data.location.bounds) {
+            let lat = data.location.bounds.top_left.lat;
+            let long = data.location.bounds.top_left.lon;
+            this.setMarker(lat, long, data.key, data.key);
+          }
+        }
     },
     searchResult: function(val) {
       const valPatch = val.map((result) => result._source['시군구'] + ' ' + result._source['도로명'] + '$' + result._source['시군구'])
       const setValPatch = new Set(valPatch);
       
-      this.currentData = val[0]._source['시군구'];
       this.markerList.map((marker) => marker.setMap(null));
       this.markerList = []
       if (val != []) {
@@ -75,8 +87,8 @@ export default {
     initMap() {
       let container = document.getElementById('map');
       let options = {
-          center: new kakao.maps.LatLng(37.566826, 126.9786567),
-          level: 3
+          center: new kakao.maps.LatLng(37.52776680483732, 126.98443310200001),
+          level: 7
       };
       this.map = new kakao.maps.Map(container, options);
       this.geocoder = new kakao.maps.services.Geocoder();
@@ -84,9 +96,6 @@ export default {
       kakao.maps.event.addListener(this.map, 'click', (mouseEvent) => {        
           // 클릭한 위도, 경도 정보를 가져옵니다 
           var latlng = mouseEvent.latLng;
-          var message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
-          message += '경도는 ' + latlng.getLng() + ' 입니다';
-          console.log(message);
           this.chosenPoint = [latlng.getLat(), latlng.getLng()]
       });
 
@@ -95,35 +104,91 @@ export default {
       //     averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
       //     minLevel: 4 // 클러스터 할 최소 지도 레벨 
       // });
+      this.getTranslatedDataWithLocation();
     },
     setMarkerFromAddress(address, city) {
       this.geocoder.addressSearch(address, (result, status) => {
         if (status === kakao.maps.services.Status.OK) {
-            let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-            let marker = new kakao.maps.Marker({
-                map: this.map,
-                position: coords,
-                clickable: true,
-                text: address
-            });
-            kakao.maps.event.addListener(marker, 'click', () => {
-              if (this.getChosenAddress() == address) {
-                if (document.getElementById('townInfo').style.display == 'block') {
-                  document.getElementById('townInfo').style.display = 'none';
-                } else {
-                  // this.getLocationGeo(city);
-                  document.getElementById('townInfo').style.display = 'block';
-                }
-              } else {
-                this.alterChosenAddress(address);
-                this.alterCurrentData(city);
-                // this.getLocationGeo(city);
-                document.getElementById('townInfo').style.display = 'block';
-              }
-            });
-            this.markerList.push(marker);
+            this.setMarker(result[0].y,  result[0].x, address, city)
         } 
       });
+    },
+    setMarker(lat, long, address, city) {
+      let coords = new kakao.maps.LatLng(lat, long);
+      let marker = new kakao.maps.Marker({
+          map: this.map,
+          position: coords,
+          clickable: true,
+          text: address
+      });
+      kakao.maps.event.addListener(marker, 'click', () => {
+      this.map.panTo(new kakao.maps.LatLng(lat, long));
+      if (this.getChosenAddress() == address) {
+        if (document.getElementById('townInfo').style.display == 'block') {
+          document.getElementById('townInfo').style.display = 'none';
+        } else {
+            // this.getLocationGeo(city);
+            document.getElementById('townInfo').style.display = 'block';
+          }
+        } else {
+          this.alterChosenAddress(address);
+          this.alterCurrentData(city);
+          // this.getLocationGeo(city);
+          document.getElementById('townInfo').style.display = 'block';
+        }
+      });
+      this.markerList.push(marker);
+    },
+    getTranslatedDataWithLocation() {
+      axios.post('http://localhost:9200/officetel-rent-data/_search',{
+        "size": 0,
+        "query": {
+          "bool": {
+            "must": [
+              {"prefix": {"시군구": "서울"}},
+              {"match": {"전월세구분": "월세"}}
+            ],
+            "filter": [
+              {"range": {"yyyymmdd": {"gte": 20200000}}}
+            ]
+          }
+        },
+        "aggs": {
+          "group_by_state": {
+            "terms": {
+              "size": 10000000, 
+              "field": "시군구"
+            },
+            "aggs": {
+                "면적": {"avg": {"field": "area"}},
+                "보증금": {"avg": {"field": "deposit"}},
+                "월세": {"avg": {"field": "rent"}},
+                "location": {"geo_bounds": {"field": "location"}},
+                "translated": {
+                "bucket_script": {
+                  "buckets_path": {
+                    "v1": "면적",
+                    "v2": "월세",
+                    "v3": "보증금"
+                  },
+                  "script": "(params.v2 + params.v3 * 0.06 /12) / params.v1 * 33"
+                }
+                }
+            }
+          }
+        }
+      }).then(res => {
+        console.log(res.data.aggregations.group_by_state.buckets);
+        for (let data of res.data.aggregations.group_by_state.buckets) {
+          if (data.location.bounds) {
+            // data.translated
+            let lat = data.location.bounds.top_left.lat;
+            let long = data.location.bounds.top_left.lon;
+
+            this.setMarker(lat, long, data.key, data.key);
+          }
+        }
+      })
     },
     getLocationGeo(city) {
       axios.post('http://localhost:9200/korea-geojson-data/_search',{
@@ -136,11 +201,8 @@ export default {
           }
         }
       }).then(res => {
-        console.log(res.data);
-        console.log(city.split(' ')[0] + ' ' + city.split(' ')[1] + ' ' + city.split(' ')[2][0] + city.split(' ')[2][1]);
         let polygonPath = []
         for (let point of res.data.hits.hits[0]._source.coordinates.coordinates[0][0]) {
-          console.log(typeof(point[0]));
           polygonPath.push(new kakao.maps.LatLng(point[1], point[0]))
         }
         // 다각형을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 다각형을 표시합니다
