@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="filterOfficetel()" height="650" style="width: 100%">
+  <el-table :data="filterOfficetel()" height="300" style="width: 100%">
     <el-table-column prop="_source.deposit" label="보증금(만원)">
     </el-table-column>
     <el-table-column prop="_source.rent" label="월세(만원)" width="60%">
