@@ -6,7 +6,6 @@
     </el-table-column>
     <el-table-column prop="_source.area" label="면적" width="60%">
     </el-table-column>
-    <el-table-column prop="_source.단지명" label="단지명"> </el-table-column>
     <el-table-column prop="_source.builtyear" label="건축년도" width="60%">
     </el-table-column>
     <el-table-column prop="_source.yyyymmdd" label="거래일" width="90%">
@@ -24,7 +23,7 @@ export default {
   methods: {
     filterOfficetel() {
       return this.searchResult.filter((val) => {
-        return this.officeName == val._source.단지명;
+        return this.officeName == val._source.도로명;
       });
     },
   },

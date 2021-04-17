@@ -59,6 +59,7 @@ export default {
       chosenPoint: [37.52405404265759, 126.98020296411083],
       officeName: [],
       officeAddr: [],
+      officeRoad: [],
       newOfficeName: [],
       searchCitiesResult: [],
     };
@@ -225,6 +226,7 @@ export default {
       //초기화
       this.officeName = [];
       this.officeAddr = [];
+      this.officeRoad = [];
       this.newOfficeName = [];
 
       //중복제거
@@ -233,6 +235,7 @@ export default {
           this.officeName.indexOf(this.searchResult[index]._source.단지명) == -1
         ) {
           this.officeName.push(this.searchResult[index]._source.단지명);
+          this.officeRoad.push(this.searchResult[index]._source.도로명);
           this.officeAddr.push(
             this.searchResult[index]._source.시군구.split(" ")
           );
@@ -244,6 +247,7 @@ export default {
         if (this.officeName[item] != undefined) {
           this.newOfficeName.push({
             value: this.officeName[item],
+            road: this.officeRoad[item],
             addr: this.officeAddr[item][this.officeAddr[item].length - 1],
           });
         }

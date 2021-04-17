@@ -23,7 +23,7 @@
         <template slot-scope="scope">
         <intermediate-result-list
         :searchResult="searchResult"
-        :officeName="scope.row.value"/>
+        :officeName="scope.row.road"/>
       </template>
       </el-table-column>
     </el-table>
