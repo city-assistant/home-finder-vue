@@ -56,7 +56,7 @@ export default {
       deposit: [0, 5000],
       rent: [0, 50],
       area: 30,
-      chosenPoint: [37.566409573096465, 126.97772421964528],
+      chosenPoint: [37.52405404265759, 126.98020296411083],
       officeName: [],
       officeAddr: [],
       newOfficeName: [],

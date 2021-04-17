@@ -22,6 +22,7 @@
             :max="10000">
           </el-slider>
         </div>
+        10평(33제곱미터)당 <br>
         예상 필요 월세 : {{ needRent }}
         <br><br>
       {{ currentData }} 정보<br><br>
