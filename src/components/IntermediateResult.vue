@@ -4,7 +4,7 @@
       v-if="this.officeName.length != 0"
       :data="officeName"
       style="width: 100%"
-      height="650"
+      max-height="650"
     >
       <el-table-column>
         <template slot-scope="{ row }">
