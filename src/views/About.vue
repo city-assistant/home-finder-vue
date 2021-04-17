@@ -15,10 +15,6 @@
         >Search</el-button
       >
       </div>
-      <!-- <input type="text" v-model="city">
-      <button v-on:click="getData">검색</button><br>
-      <button v-on:click="getAllCities">getAllCities</button>
-      {{ city }} -->
       <LineChart :passData="passData"/>
       <button v-on:click="saveData">분석 리포트 다운로드</button>
   </div>
@@ -123,9 +119,6 @@ export default {
                   if (data.translated) {
                     labels.push(data.key_as_string)
                     datas.push(data.translated.value)
-                  } else {
-                    labels.push(data.key_as_string)
-                    datas.push("")
                   }
                 }
                 console.log(labels);
@@ -139,33 +132,6 @@ export default {
                 }
             })
           },
-          //  loadAll() {
-          //     axios
-          //       .post("http://localhost:9200/officetel-rent-data/_search", {
-          //         size: 0,
-          //         query: {
-          //           prefix: {
-          //             시군구: {
-          //               value: "서울",
-          //             },
-          //           },
-          //         },
-          //         aggs: {
-          //           group_by_state: {
-          //             terms: {
-          //               size: 10000000,
-          //               field: "시군구",
-          //             },
-          //           },
-          //         },
-          //       })
-          //       .then((res) => {
-          //         console.log(res.data.aggregations.group_by_state.buckets);
-          //         res.data.aggregations.group_by_state.buckets.map((val) => {
-          //           this.links.push({ value: val.key });
-          //         });
-          //       });
-          //   },
             querySearch(queryString, cb) {
               var results = this.allCitys.filter((el) => {
                 return el.value.match(queryString);
@@ -177,7 +143,6 @@ export default {
             },
   },
     mounted(){
-      // this.loadAll();
       this.getAllCities();
     }
 }
