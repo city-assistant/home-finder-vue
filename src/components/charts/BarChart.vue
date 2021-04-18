@@ -33,18 +33,8 @@
     methods: {
       fillData () {
         this.datacollection = {
-          labels: [1,2],
-          datasets: [
-            {
-              label: 'Data One',
-              backgroundColor: '#f87979',
-              data: [0, 1]
-            }, {
-              label: 'Data One',
-              backgroundColor: '#f87979',
-              data: [0.5, 2]
-            }
-          ]
+          labels: [],
+          datasets: []
         }
       },
     }

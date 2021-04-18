@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="map" class="map"></div>
-    <town-info :currentData="currentData" />
+    <town-info :currentData="currentData" v-if="townInfoVisible" />
   </div>
 </template>
 
@@ -15,6 +15,7 @@ export default {
     searchResult: Array,
     searchCitiesResult: Array,
     emphasizedMarker: String,
+    townInfoVisible: Boolean,
   },
   components: {
     townInfo,
@@ -25,6 +26,7 @@ export default {
       geocoder: undefined,
       clusterer: undefined,
       pickedMarker: undefined,
+      searchCircle: undefined,
       cityMarkerList: [],
       buildingMarkerList: [],
       currentData: "",
@@ -38,6 +40,9 @@ export default {
       : this.addKakaoMapScript();
   },
   watch: {
+    chosenAddress: function(val) {
+      this.$emit("updateChosenAddress", val);
+    },
     emphasizedMarker: function(val) {
       console.log(val);
     },
@@ -49,16 +54,19 @@ export default {
     },
     searchCitiesResult: function(val) {
       this.buildingMarkerList.map((marker) => marker.setMap(null));
-      this.buildingMarkerList = [];
       this.cityMarkerList.map((marker) => marker.setMap(null));
+      this.buildingMarkerList = [];
       this.cityMarkerList = [];
       for (let data of val) {
         if (data.location.bounds) {
           let lat = data.location.bounds.top_left.lat;
           let long = data.location.bounds.top_left.lon;
-          this.setCityMarker(lat, long, data.key, data.key);
+          let degree = parseInt((data.translated.value * 10) / 200);
+          this.setCityMarker(lat, long, data.key, data.key, degree * 2);
         }
       }
+      this.map.setLevel(7);
+      this.map.setCenter(this.pickedMarker.getPosition());
     },
     searchResult: function(val) {
       this.cityMarkerList.map((marker) => marker.setMap(null));
@@ -155,36 +163,65 @@ export default {
             // document.getElementById('townInfo').style.display = 'block';
           }
         } else {
-          this.alterChosenAddress(address);
+          // this.alterChosenAddress(address);
           // document.getElementById('townInfo').style.display = 'block';
         }
       });
       this.buildingMarkerList.push(marker);
     },
-    setCityMarker(lat, long, address, city) {
-      this.map.setLevel(7);
-      // this.map.setCenter(this.pickedMarker.position);
-      let coords = new kakao.maps.LatLng(lat, long);
-      let marker = new kakao.maps.Marker({
+    setCityMarker(lat, long, address, city, degree) {
+      let imageSrc =
+          "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png", // 마커이미지의 주소입니다
+        imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
+        imageOption = { offset: new kakao.maps.Point(27, 69) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+      let markerImage = new kakao.maps.MarkerImage(
+        imageSrc,
+        imageSize,
+        imageOption
+      );
+
+      let option = {
         map: this.map,
-        position: coords,
-        clickable: true,
-        text: address,
-      });
+        zIndex: 5,
+        center: new kakao.maps.LatLng(lat, long),
+        radius: 200,
+        strokeWeight: 5,
+        strokeColor: "ff" + degree.toString(16) + degree.toString(16) + "ff",
+        strokeOpacity: 1,
+        fillColor:
+          "#" +
+          "ff" +
+          (16 - degree).toString(16) +
+          (16 - degree).toString(16) +
+          "ff",
+        fillOpacity: 0.5,
+        image: markerImage,
+      };
+      let marker = new kakao.maps.Circle(option);
+
+      // kakao.maps.event.addListener(marker, "mouseover", () => {
+      //   console.log("mouseIn");
+      // });
+      // kakao.maps.event.addListener(marker, "mouseout", () => {
+      //   console.log("mouseOut");
+      // });
+
       kakao.maps.event.addListener(marker, "click", () => {
         this.map.panTo(new kakao.maps.LatLng(lat, long));
         this.map.setLevel(4);
-        if (this.getChosenAddress() == address) {
-          if (document.getElementById("townInfo").style.display == "block") {
-            document.getElementById("townInfo").style.display = "none";
+
+        if (this.currentData == city) {
+          if (this.townInfoVisible) {
+            this.$emit("updateTownInfoVisible", false);
           } else {
-            // this.getLocationGeo(city);
-            document.getElementById("townInfo").style.display = "block";
+            this.cityMarkerList.map((marker) => marker.setMap(null));
+            this.map.panTo(marker.getPosition());
+            this.$emit("updateTownInfoVisible", true);
           }
         } else {
-          this.alterCurrentData(city);
-          // this.getLocationGeo(city);
-          document.getElementById("townInfo").style.display = "block";
+          this.currentData = city;
+          this.$emit("updateTownInfoVisible", true);
+          console.log(3);
         }
       });
       this.cityMarkerList.push(marker);
@@ -235,8 +272,8 @@ export default {
               // data.translated
               let lat = data.location.bounds.top_left.lat;
               let long = data.location.bounds.top_left.lon;
-
-              this.setCityMarker(lat, long, data.key, data.key);
+              let degree = parseInt((data.translated.value * 10) / 200);
+              this.setCityMarker(lat, long, data.key, data.key, degree * 2);
             }
           }
         });
@@ -265,30 +302,6 @@ export default {
             .coordinates[0][0]) {
             polygonPath.push(new kakao.maps.LatLng(point[1], point[0]));
           }
-          // 다각형을 구성하는 좌표 배열입니다. 이 좌표들을 이어서 다각형을 표시합니다
-          // let polygonPath = [
-          //     new kakao.maps.LatLng(33.45133510810506, 126.57159381623066),
-          //     new kakao.maps.LatLng(33.44955812811862, 126.5713551811832),
-          //     new kakao.maps.LatLng(33.449986291544086, 126.57263296172184),
-          //     new kakao.maps.LatLng(33.450682513554554, 126.57321034054742),
-          //     new kakao.maps.LatLng(33.451346760004206, 126.57235740081413)
-          // ];
-
-          // 지도에 표시할 다각형을 생성합니다
-          var polygon = new kakao.maps.Polygon({
-            path: polygonPath, // 그려질 다각형의 좌표 배열입니다
-            strokeWeight: 3, // 선의 두께입니다
-            strokeColor: "#39DE2A", // 선의 색깔입니다
-            strokeOpacity: 0.8, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-            strokeStyle: "longdash", // 선의 스타일입니다
-            fillColor: "#A2FF99", // 채우기 색깔입니다
-            fillOpacity: 0.7, // 채우기 불투명도 입니다
-          });
-
-          // 지도에 다각형을 표시합니다
-          console.log(polygonPath);
-          console.log(polygon);
-          polygon.setMap(this.map);
         });
     },
     alterCurrentData(val) {

@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="sidebar">
-      <div class="sub-title">목적지 위치 : {{ chosenPoint }}</div>
+      <div class="sub-title" v-if="!townInfoVisible">
+        목적지 위치 : {{ chosenPoint }}
+      </div>
       <el-autocomplete
         class="inline-input"
         v-model="searchAddress"
@@ -9,11 +11,23 @@
         placeholder="한정지을 지역(선택)"
         :trigger-on-focus="false"
         @select="handleSelect"
+        v-if="!townInfoVisible"
       ></el-autocomplete>
-      <el-button type="primary" icon="el-icon-search" v-on:click="searchCities"
+      <el-button
+        type="primary"
+        icon="el-icon-search"
+        v-on:click="searchCities"
+        v-if="!townInfoVisible"
         >Search</el-button
       >
-      <div id="filters">
+      <el-button
+        type="primary"
+        icon="el-icon-back"
+        v-on:click="searchCities"
+        v-if="townInfoVisible"
+        >Back</el-button
+      >
+      <div id="filters" v-if="!townInfoVisible">
         <filter-items
           v-on:areaUpdate="areaUpdate"
           v-on:distanceUpdate="distanceUpdate"
@@ -27,10 +41,13 @@
       v-on:emitAddress="emphasizeMarker"
       :searchResult="searchResult"
       :officeName="newOfficeName"
+      v-if="townInfoVisible"
     />
     <Map
       :searchResult="searchResult"
       :searchCitiesResult="searchCitiesResult"
+      :townInfoVisible="townInfoVisible"
+      v-on:updateTownInfoVisible="updateTownInfoVisible"
       v-on:chosenPointUpdate="chosenPointUpdate"
       v-on:currentDataUpdate="currentDataUpdate"
     />
@@ -62,10 +79,14 @@ export default {
       officeRoad: [],
       newOfficeName: [],
       searchCitiesResult: [],
+      townInfoVisible: false,
     };
   },
   components: { FilterItems, IntermediateResult, Map },
   methods: {
+    updateTownInfoVisible(val) {
+      this.townInfoVisible = val;
+    },
     currentDataUpdate(val) {
       this.searchQuery(val);
     },
@@ -91,6 +112,9 @@ export default {
       this.rent = val;
     },
     searchCities() {
+      console.log(this.townInfoVisible);
+      this.townInfoVisible = false;
+      console.log(this.townInfoVisible);
       let translatedMin =
         ((this.rent[0] + (this.deposit[0] * 0.05) / 12) * 33) / this.area;
       let translatedMax =

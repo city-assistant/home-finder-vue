@@ -74,15 +74,14 @@ color: #42b983;
 }
 
 #townInfo {
-  border-radius: 20px;
   position: absolute;
   float : left;
   background-color: #ffffff;
   align-items: center;
   align-content: center;
 	width : 250px;
-  height: 72%;
-  top: 25%;
+  height: 95%;
+  top: 5%;
   left: 10px;
   z-index: 1;
   transition: 1s;
