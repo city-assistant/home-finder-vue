@@ -50,12 +50,15 @@
       v-on:updateTownInfoVisible="updateTownInfoVisible"
       v-on:chosenPointUpdate="chosenPointUpdate"
       v-on:currentDataUpdate="currentDataUpdate"
+      v-on:citiesResultUpdate="citiesResultUpdate"
     />
+    <CitiesResult v-if="!townInfoVisible && citiesResult != []" :searchResult="citiesResult"/>
   </div>
 </template>
 
 <script>
-import FilterItems from "../components/FilterItems.vue";
+import FilterItems from "./FilterItems.vue";
+import CitiesResult from "./CitiesResult.vue"
 import IntermediateResult from "./IntermediateResult.vue";
 import Map from "../components/Map.vue";
 
@@ -80,10 +83,14 @@ export default {
       newOfficeName: [],
       searchCitiesResult: [],
       townInfoVisible: false,
+      citiesResult: []
     };
   },
-  components: { FilterItems, IntermediateResult, Map },
+  components: { FilterItems, IntermediateResult, Map, CitiesResult },
   methods: {
+    citiesResultUpdate(val) {
+      this.citiesResult = val;
+    },
     updateTownInfoVisible(val) {
       this.townInfoVisible = val;
     },
@@ -237,7 +244,6 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res.data.aggregations.group_by_state.buckets);
           res.data.aggregations.group_by_state.buckets.map((val) => {
             this.links.push({ value: val.key });
           });

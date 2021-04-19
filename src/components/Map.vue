@@ -186,15 +186,15 @@ export default {
         center: new kakao.maps.LatLng(lat, long),
         radius: 200,
         strokeWeight: 5,
-        strokeColor: "ff" + degree.toString(16) + degree.toString(16) + "ff",
+        strokeColor: "fabdcf",
         strokeOpacity: 1,
         fillColor:
           "#" +
-          "ff" +
+          // "ffff" +
           (16 - degree).toString(16) +
           (16 - degree).toString(16) +
-          "ff",
-        fillOpacity: 0.5,
+          "abfa",
+        fillOpacity: 0.75,
         image: markerImage,
       };
       let marker = new kakao.maps.Circle(option);
@@ -266,8 +266,8 @@ export default {
           },
         })
         .then((res) => {
-          console.log(res.data.aggregations.group_by_state.buckets);
-          for (let data of res.data.aggregations.group_by_state.buckets) {
+          let val = res.data.aggregations.group_by_state.buckets;
+          for (let data of val) {
             if (data.location.bounds) {
               // data.translated
               let lat = data.location.bounds.top_left.lat;
@@ -276,6 +276,7 @@ export default {
               this.setCityMarker(lat, long, data.key, data.key, degree * 2);
             }
           }
+          this.$emit("citiesResultUpdate", val);
         });
     },
     getLocationGeo(city) {
