@@ -52,7 +52,7 @@
       v-on:currentDataUpdate="currentDataUpdate"
       v-on:citiesResultUpdate="citiesResultUpdate"
     />
-    <CitiesResult v-if="!townInfoVisible && citiesResult != []" :searchResult="citiesResult"/>
+    <CitiesResult v-if="!townInfoVisible && citiesResult != []" :searchResult="citiesResult" />
   </div>
 </template>
 
@@ -119,6 +119,7 @@ export default {
       this.rent = val;
     },
     searchCities() {
+      
       console.log(this.townInfoVisible);
       this.townInfoVisible = false;
       console.log(this.townInfoVisible);
@@ -188,6 +189,7 @@ export default {
         .then((res) => {
           this.searchCitiesResult =
             res.data.aggregations.group_by_state.buckets;
+          this.citiesResult = this.searchCitiesResult
         });
     },
     searchQuery(val) {
@@ -287,6 +289,7 @@ export default {
   },
   mounted() {
     this.loadAll();
+    // this.searchCities();
   },
 };
 </script>
