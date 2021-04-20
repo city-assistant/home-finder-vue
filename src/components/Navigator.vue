@@ -76,7 +76,7 @@ export default {
       deposit: [0, 5000],
       rent: [0, 50],
       area: 30,
-      chosenPoint: [37.52405404265759, 126.98020296411083],
+      chosenPoint: [37.52, 126.98],
       officeName: [],
       officeAddr: [],
       officeRoad: [],
@@ -104,7 +104,7 @@ export default {
       this.areaUpdate = val;
     },
     chosenPointUpdate(val) {
-      this.chosenPoint = val;
+      this.chosenPoint = [parseInt(val[0]*100)/100, parseInt(val[1]*100)/100];
     },
     distanceUpdate(val) {
       this.distance = val;

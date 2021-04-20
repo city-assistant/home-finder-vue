@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div id="loading" v-if="loading"></div>
     <br />분석 페이지 <br />
     <br /><br /><br /><br />
     <div>
@@ -19,8 +20,12 @@
       <el-button type="primary" icon="el-icon-search" v-on:click="getData"
         >Search</el-button
       >
+      <el-button type="primary" icon="el-icon-search" v-on:click="analyze"
+        >Analyze</el-button
+      >
     </div>
     <LineChart :passData="passData" style="width: 50vh" /><br />
+    <LineChart :passData="passAnalyzedData" style="width: 50vh;" /><br />
 
     여기서의 합계 지수는, 월세 + 보증금 * 전월세전환률 / 12개월 의 수치로, 평균
     전월세 전환률은 약 5~6프로로 추산합니다. <br /><br />
@@ -44,12 +49,40 @@ export default {
       passData: {},
       allCitys: [],
       allDatas: {},
+      forAnalyze: [],
+      passAnalyzedData: {},
+      loading: false
     };
   },
   created: function() {
     this.getData();
   },
   methods: {
+    analyze: function() {
+      this.loading = true;
+      axios.post("http://localhost:5000/", {
+        data: this.forAnalyze
+      }).then(res => {
+        console.log(res.data);
+
+        let labels = []
+        for (let i = 1; i <= 12; i++) {
+          labels.push(i + '개월 후')
+        }
+        let datas = [];
+        for (let data of res.data) {
+          datas.push(data);
+        }
+        this.passAnalyzedData = {
+          labels: labels,
+          datasets: [{ data: datas, label: "10평 합계지수 예상" }],
+        };
+        this.loading = false;
+      }).catch(error => {
+        console.log(error);
+        this.loading = false;
+      })
+    },
     saveData: function() {
       let data = this.allDatas;
 
@@ -131,6 +164,8 @@ export default {
               datas.push(data.translated.value);
             }
           }
+
+          this.forAnalyze = datas;
           this.allDatas[passCity] = { labels: labels, datas: datas };
           this.passData = {
             labels: labels,

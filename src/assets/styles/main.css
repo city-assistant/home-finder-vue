@@ -123,3 +123,12 @@ color: #42b983;
 @media (max-width: 1023px) {
   
 }
+
+#loading {
+  width: 100vw; 
+  height: 100vh; 
+  z-index:10;
+  background-color: black;
+  position: absolute;
+  opacity: 50%;
+}

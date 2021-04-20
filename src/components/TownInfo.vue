@@ -1,7 +1,10 @@
 <template>
   <div id="townInfo">
     {{ currentData }} 정보<br /><br />
-
+      <el-button
+        type="primary"
+        icon="el-icon-save"
+        >Save</el-button><br><br>
     전월세 전환률 설정 : {{ transferRatio }}%
     <!-- https://kosis.kr/statHtml/statHtml.do?orgId=408&tblId=DT_30404_N0010 참고 -->
     <div class="block">
