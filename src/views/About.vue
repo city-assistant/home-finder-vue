@@ -73,9 +73,13 @@ export default {
         for (let data of res.data) {
           datas.push(data);
         }
+
         this.passAnalyzedData = {
           labels: labels,
-          datasets: [{ data: datas, label: "10평 합계지수 예상" }],
+          datasets: [
+            { data: datas, label: "10평 합계지수 예상" },
+            // { data: this.forAnalyze[-10:], label: "10평 실제 데이터" },
+          ],
         };
         this.loading = false;
       }).catch(error => {
@@ -147,7 +151,7 @@ export default {
                       v3: "보증금",
                     },
                     script:
-                      "(params.v2 + (params.v3 * 0.06 /12)) / params.v1 * 33",
+                      "(params.v2 + (params.v3 * 0.05 /12)) / params.v1 * 33",
                   },
                 },
               },
