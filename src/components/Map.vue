@@ -9,7 +9,8 @@
 import axios from "axios";
 import townInfo from "./TownInfo.vue";
 import constant from "../store/constant";
-
+import eventbus from "../store/EventBus";
+eventbus;
 export default {
   props: {
     searchResult: Array,
@@ -199,25 +200,23 @@ export default {
       };
       let marker = new kakao.maps.Circle(option);
 
-      // kakao.maps.event.addListener(marker, "mouseover", () => {
-      //   console.log("mouseIn");
-      // });
-      // kakao.maps.event.addListener(marker, "mouseout", () => {
-      //   console.log("mouseOut");
-      // });
+      kakao.maps.event.addListener(marker, "mouseover", () => {
+        eventbus.$emit("");
+        console.log("mouseIn");
+      });
+      kakao.maps.event.addListener(marker, "mouseout", () => {
+        console.log("mouseOut");
+      });
 
       kakao.maps.event.addListener(marker, "click", () => {
+        
         this.map.panTo(new kakao.maps.LatLng(lat, long));
         this.map.setLevel(4);
 
         if (this.currentData == city) {
-          if (this.townInfoVisible) {
-            this.$emit("updateTownInfoVisible", false);
-          } else {
-            this.cityMarkerList.map((marker) => marker.setMap(null));
-            this.map.panTo(marker.getPosition());
-            this.$emit("updateTownInfoVisible", true);
-          }
+          this.map.panTo(marker.getPosition());
+          this.cityMarkerList.map((marker) => marker.setMap(null));
+          this.$emit("updateTownInfoVisible", true);
         } else {
           this.currentData = city;
           this.$emit("updateTownInfoVisible", true);

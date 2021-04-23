@@ -98,6 +98,10 @@ color: #42b983;
   margin: 0;
 }
 
+ellipse:hover{ 
+  cursor:pointer
+}
+
 /* chart */
 .small {
   width: 22vh;

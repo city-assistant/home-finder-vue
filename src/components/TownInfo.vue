@@ -1,5 +1,6 @@
 <template>
   <div id="townInfo">
+    <div v-if="needRent == 0">분석 정보가 부족해 차트로 표현되지 않았습니다.</div>
     {{ currentData }} 정보<br /><br />
       <el-button
         type="primary"
@@ -18,7 +19,6 @@
       </el-slider>
     </div>
     <BarChart :passData="translatedData" /><br>
-    <div v-if="needRent == 0">분석 정보가 부족해 차트로 표현되지 않았습니다.</div><br>
     가용 보증금 : {{ possibleDeposit }} 만원
     <div class="block">
       <el-slider
