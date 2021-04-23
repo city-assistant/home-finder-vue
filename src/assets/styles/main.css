@@ -103,6 +103,31 @@ color: #42b983;
   width: 22vh;
 }
 
+.reportCharts {
+  width: 100vw;
+  align-items: center;
+}
+
+.reportCharts .chart {
+  width: 50vh;
+  max-width: 95vw;
+  float: left;
+}
+.reportCharts .miniChart {
+  width: 50vh;
+  max-width: 47.5vw;
+  /* width: 25vh; */
+  float: left;
+}
+
+.reportBottom {
+  position: fixed;
+  margin-top: 10px;
+  align-items: center;
+  width: 100%;
+  bottom: 0;
+}
+
 #logInPage {
   justify-content: center;
   align-items: center;
@@ -126,7 +151,7 @@ color: #42b983;
 
 #loading {
   width: 100vw; 
-  height: 100vh; 
+  height: 150vh; 
   z-index:10;
   background-color: black;
   position: absolute;

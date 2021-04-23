@@ -24,13 +24,18 @@
         >Analyze</el-button
       >
     </div>
-    <LineChart :passData="passData" style="width: 50vh" /><br />
-    <LineChart :passData="passAnalyzedData" style="width: 50vh;" /><br />
+    <div class="reportCharts">
+      <LineChart class="chart" :passData="passData" />
+      <LineChart class="miniChart" :passData="passTestedData"/>
+      <LineChart class="miniChart" :passData="passAnalyzedData"/>
+    </div>
 
-    여기서의 합계 지수는, 월세 + 보증금 * 전월세전환률 / 12개월 의 수치로, 평균
-    전월세 전환률은 약 5~6프로로 추산합니다. <br /><br />
+    <div class="reportBottom">
+      여기서의 합계 지수는, 월세 + 보증금 * 전월세전환률 / 12개월 의 수치로, 평균
+      전월세 전환률은 약 5~6프로로 추산합니다. <br /><br />
+      <button v-on:click="saveData">분석 리포트 다운로드</button>
+    </div>
 
-    <button v-on:click="saveData">분석 리포트 다운로드</button>
   </div>
 </template>
 
@@ -51,6 +56,7 @@ export default {
       allDatas: {},
       forAnalyze: [],
       passAnalyzedData: {},
+      passTestedData: {},
       loading: false
     };
   },
@@ -65,20 +71,28 @@ export default {
       }).then(res => {
         console.log(res.data);
 
+        let testLabels = []
+        for (let i = 1; i <= 12; i++) {
+          testLabels.push(13-i + '개월 전')
+        }
+
+        this.passTestedData = {
+          labels: testLabels,
+          datasets: [
+            { data: this.forAnalyze.slice(this.forAnalyze.length - 12), label: "10평 실제 데이터", backgroundColor: '#66B1FF'},
+            { data: res.data.test, label: "10평 분석 테스트", backgroundColor: '#12B1FF'},
+          ],
+        };
+
         let labels = []
         for (let i = 1; i <= 12; i++) {
           labels.push(i + '개월 후')
-        }
-        let datas = [];
-        for (let data of res.data) {
-          datas.push(data);
         }
 
         this.passAnalyzedData = {
           labels: labels,
           datasets: [
-            { data: datas, label: "10평 합계지수 예상" },
-            // { data: this.forAnalyze[-10:], label: "10평 실제 데이터" },
+            { data: res.data.result, label: "10평 분석 결과" },
           ],
         };
         this.loading = false;
