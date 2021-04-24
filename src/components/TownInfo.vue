@@ -4,6 +4,7 @@
     {{ currentData }} 정보<br /><br />
       <el-button
         v-if="this.$cookies.get('userToken') != null"
+        v-on:click="saveUserInterest"
         type="primary"
         icon="el-icon-save"
         >Save</el-button><br><br>
@@ -43,6 +44,7 @@
 import LineChart from "./charts/LineChart";
 import BarChart from "./charts/BarChart";
 import axios from "axios";
+import store from "../store/store"
 
 export default {
   components: {
@@ -92,6 +94,17 @@ export default {
     },
   },
   methods: {
+    saveUserInterest() {
+      let userToken = this.$cookies.get("userToken");
+      axios.post(store.state.BACK_SERVER_LOCAL + "insertUserInterest", 
+        {"userToken": userToken, "city": this.currentData}, 
+        {headers:{"Authorization": "Bearer " + userToken}}
+      ).then(res => {
+        alert(res.data);
+      }).catch(err => {
+        alert(err);
+      })
+    },
     updateTranslatedData(data) {
       let i = 0;
       let labels = [];

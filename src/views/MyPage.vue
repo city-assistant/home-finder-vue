@@ -5,28 +5,98 @@
     <button v-on:click="logOut">
       logout
     </button>
-
-    <div v-for="(item, index) in userSavedList" :key="index">
-      {{item}}
+    <div class="wrapper">
+      <div class="longBox" v-for="(item, index) in userSavedList" :key="index">
+        <div class="innerBox">
+          {{item.city}}
+          <button v-on:click="deleteUserInterest(item.city)">del</button>
+        </div>
+        <LineChart :passData="passData[item.city]" class="chart"/>
+      </div>
     </div>
-
   </div>
 </template>
 
 <script>
+import store from "../store/store";
 import axios from 'axios';
-axios
+import LineChart from '../components/charts/LineChart'
+
 export default {
   name: "MyPage",
+  components: {
+    LineChart
+  },
   created: function() {
-    //여기서 해당 user의 저장 목록 불러와서 엘라스틱 서치에 검색 날리는것 까지 이뤄져야 할 것으로 보임, 백엔드에선 header 및 바디에서 받은 cookie 토큰을 가지고 userId 검증
+    },
+  mounted: function() {
+    this.getUserInterestList();
+
   },
   data() {
     return {
-      userSavedList: [1,2]
+      userSavedList: [],
+      passData: {}
     }
   },
   methods: {
+    getCityData(injectData) {
+      let passData = {};
+      let userToken = this.$cookies.get("userToken");
+      axios.post(store.state.BACK_SERVER_LOCAL + "officetelPrefixSearch", 
+      {"city": injectData},
+      {headers:{"Authorization": "Bearer " + userToken}}
+      ).then(res => {
+          let labels = [];
+          let datas = [];
+          for (let data of res.data.aggregations.result.buckets) {
+            if (data.translated) {
+              labels.push(data.key_as_string);
+              datas.push(data.translated.value);
+            }
+          }
+          passData = [this.passData]
+
+          passData[0][injectData] = {
+            labels: labels,
+            datasets: [{ data: datas, label: "10평 합계지수" }],
+          };
+
+          this.passData = passData[0];
+
+          console.log(this.passData);
+        }).catch(err => {
+        alert(err);
+      })
+    },
+    deleteUserInterest(city) {
+      console.log(city);
+      let userToken = this.$cookies.get("userToken");
+      axios.post(store.state.BACK_SERVER_LOCAL + "deleteUserInterest", 
+        {"userToken": userToken, "city": city}, 
+        {headers:{"Authorization": "Bearer " + userToken}}
+      ).then(res => {
+        res.data
+        alert("삭제되었습니다.")
+        location.reload()
+      }).catch(err =>{
+        alert(err);
+      })
+    },
+    getUserInterestList() {
+      let userToken = this.$cookies.get("userToken");
+      axios.post(store.state.BACK_SERVER_LOCAL + "getUserInterestListByUserId", 
+        {"userToken": userToken}, 
+        {headers:{"Authorization": "Bearer " + userToken}}
+      ).then(res => {
+        this.userSavedList = res.data;
+        for (let inject of res.data) {
+          this.getCityData(inject.city);
+        } 
+      }).catch(err =>{
+        alert(err);
+      })
+    },
     logOut() {
       this.$cookies.remove("userToken");
       alert("로그아웃 되었습니다");

@@ -1,9 +1,9 @@
 <template>
   <div id="logInPage">
     <div id="logInBox">
-      로그인 페이지<br />
-      <input type="text" v-model="currentId" /><br />
-      <input type="password" v-model="currentPw" /><br />
+      로그인 페이지<br><br>
+      <el-input class="inline-input" type="id" v-model="currentId"></el-input>
+      <el-input class="inline-input" type="password" v-model="currentPw"></el-input><br><br>
       <button v-on:click="login">login</button>
     </div>
   </div>
