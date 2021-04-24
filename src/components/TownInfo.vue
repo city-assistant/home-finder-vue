@@ -3,6 +3,7 @@
     <div v-if="needRent == 0">분석 정보가 부족해 차트로 표현되지 않았습니다.</div>
     {{ currentData }} 정보<br /><br />
       <el-button
+        v-if="this.$cookies.get('userToken') != null"
         type="primary"
         icon="el-icon-save"
         >Save</el-button><br><br>
