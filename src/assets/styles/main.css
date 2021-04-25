@@ -113,7 +113,7 @@ ellipse:hover{
 
 .top-long-box {
     background-color: rgb(144, 27, 247);
-    height: 15vh;
+    /* height: 15vh; */
     max-height: 200px;
     margin-left: 3%;
     width: 94%;
@@ -174,7 +174,7 @@ ellipse:hover{
 
 .reportBottom {
   background-color: rgb(144, 27, 247);
-  height: 15vh;
+  /* height: 15vh; */
   max-height: 200px;
   margin-left: 3%;
   width: 94%;

@@ -126,7 +126,7 @@ export default {
                 this.allDatas[passCity] = {labels: labels, datas: datas}
                 // this.passData = {
                 //   labels: labels,
-                //   datasets: [{data:datas, label:'10평 합계지수'}]
+                //   datasets: [{data:datas, label:'10평당 합계지수'}]
                 // }
             })
     }

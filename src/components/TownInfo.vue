@@ -1,13 +1,16 @@
 <template>
   <div id="townInfo">
-    <div v-if="needRent == 0">분석 정보가 부족해 차트로 표현되지 않았습니다.</div>
+    <div v-if="needRent == 0">
+      분석 정보가 부족해 차트로 표현되지 않았습니다.
+    </div>
     {{ currentData }} 정보<br /><br />
-      <el-button
-        v-if="this.$cookies.get('userToken') != null"
-        v-on:click="saveUserInterest"
-        type="primary"
-        icon="el-icon-save"
-        >Save</el-button><br><br>
+    <el-button
+      v-if="this.$cookies.get('userToken') != null"
+      v-on:click="saveUserInterest"
+      type="primary"
+      icon="el-icon-save"
+      >Save</el-button
+    ><br /><br />
     전월세 전환률 설정 : {{ transferRatio }}%
     <!-- https://kosis.kr/statHtml/statHtml.do?orgId=408&tblId=DT_30404_N0010 참고 -->
     <div class="block">
@@ -20,7 +23,7 @@
       >
       </el-slider>
     </div>
-    <BarChart :passData="translatedData" /><br>
+    <BarChart :passData="translatedData" /><br />
     가용 보증금 : {{ possibleDeposit }} 만원
     <div class="block">
       <el-slider
@@ -44,7 +47,7 @@
 import LineChart from "./charts/LineChart";
 import BarChart from "./charts/BarChart";
 import axios from "axios";
-import store from "../store/store"
+import store from "../store/store";
 
 export default {
   components: {
@@ -86,24 +89,22 @@ export default {
     transferRatio: function(data) {
       this.updateTranslatedData(data);
     },
-    chosenAddress: function(address) {
-      this.getSpecificChartData(
-        this.currentData,
-        address.substring(this.currentData.length + 1, address.length)
-      );
-    },
   },
   methods: {
     saveUserInterest() {
       let userToken = this.$cookies.get("userToken");
-      axios.post(store.state.BACK_SERVER_LOCAL + "insertUserInterest", 
-        {"userToken": userToken, "city": this.currentData}, 
-        {headers:{"Authorization": "Bearer " + userToken}}
-      ).then(res => {
-        alert(res.data);
-      }).catch(err => {
-        alert(err);
-      })
+      axios
+        .post(
+          store.state.SPRING_SERVER + "insertUserInterest",
+          { userToken: userToken, city: this.currentData },
+          { headers: { Authorization: "Bearer " + userToken } }
+        )
+        .then((res) => {
+          alert(res.data);
+        })
+        .catch((err) => {
+          alert(err);
+        });
     },
     updateTranslatedData(data) {
       let i = 0;
@@ -130,125 +131,13 @@ export default {
       );
       console.log(this.translatedData);
     },
-    getSpecificChartData(city, road) {
-      axios
-        .post("http://localhost:9200/officetel-rent-data/_search", {
-          size: 0,
-          sort: {
-            "@timestamp": {
-              order: "asc",
-            },
-          },
-          query: {
-            bool: {
-              must: [{ match: { 시군구: city } }, { match: { 도로명: road } }],
-            },
-          },
-          aggs: {
-            result: {
-              date_histogram: {
-                field: "@timestamp",
-                calendar_interval: "year",
-                format: "yyyy",
-              },
-              aggs: {
-                면적: {
-                  avg: { field: "area" },
-                },
-                보증금: { avg: { field: "deposit" } },
-                월세: { avg: { field: "rent" } },
-                "10평당 월세": {
-                  bucket_script: {
-                    buckets_path: {
-                      v1: "면적",
-                      v2: "월세",
-                    },
-                    script: "params.v2 / params.v1 * 33",
-                  },
-                },
-                "10평당 보증금": {
-                  bucket_script: {
-                    buckets_path: {
-                      v1: "면적",
-                      v2: "보증금",
-                    },
-                    script: "params.v2 / params.v1 * 33",
-                  },
-                },
-              },
-            },
-          },
-        })
-        .then((res) => {
-          let labels = [];
-          let tempData1 = { data: [], label: "10평당 보증금" };
-          let tempData2 = { data: [], label: "10평당 월세" };
-          for (let data of res.data.aggregations.result.buckets) {
-            labels.push(data.key_as_string);
-            tempData1["data"].push(data["10평당 보증금"].value);
-            tempData2["data"].push(data["10평당 월세"].value);
-          }
-
-          this.passSpecificData = {
-            labels: labels,
-            datasets: [tempData1, tempData2],
-          };
-        });
-    },
     getChartData(val) {
-      axios
-        .post("http://localhost:9200/officetel-rent-data/_search", {
-          size: 0,
-          sort: {
-            "@timestamp": {
-              order: "asc",
-            },
-          },
-          query: {
-            bool: {
-              must: [
-                { match: { 전월세구분: "월세" } },
-                { prefix: { 시군구: { value: val } } },
-              ],
-            },
-          },
-          aggs: {
-            result: {
-              date_histogram: {
-                field: "@timestamp",
-                calendar_interval: "year",
-                format: "yyyy",
-              },
-              aggs: {
-                면적: {
-                  avg: { field: "area" },
-                },
-                보증금: { avg: { field: "deposit" } },
-                월세: { avg: { field: "rent" } },
-                "10평당 월세": {
-                  bucket_script: {
-                    buckets_path: {
-                      v1: "면적",
-                      v2: "월세",
-                    },
-                    script: "params.v2 / params.v1 * 33",
-                  },
-                },
-                "10평당 보증금": {
-                  bucket_script: {
-                    buckets_path: {
-                      v1: "면적",
-                      v2: "보증금",
-                    },
-                    script: "params.v2 / params.v1 * 33",
-                  },
-                },
-              },
-            },
-          },
-        })
+      axios.post(
+          store.state.SPRING_SERVER + "getChartData",
+          { city: val }
+        )
         .then((res) => {
-          console.log();
+          console.log(res.data);
           let labels = [];
           let tempData1 = { data: [], label: "10평당 보증금" };
           let tempData2 = { data: [], label: "10평당 월세" };
@@ -270,6 +159,9 @@ export default {
             datasets: [tempData2],
           };
           this.updateTranslatedData(this.transferRatio);
+        })
+        .catch((err) => {
+          alert(err);
         });
     },
   },

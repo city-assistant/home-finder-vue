@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    SPRING_SERVER: 'http://localhost:8090/',
     BACK_SERVER_LOCAL: 'http://localhost:8090/',
     BACK_SERVER_REAL: 'http://studioj.ddns.net:8090/',
   },

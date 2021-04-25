@@ -7,7 +7,7 @@
       max-height="650"
     >
       <el-table-column label="지역명" prop="key"></el-table-column>
-      <el-table-column label="예상 10평 헙계 지수" prop="translated.value"></el-table-column>
+      <el-table-column label="예상 10평당 헙계 지수" prop="translated.value"></el-table-column>
 
     </el-table>
   </div>

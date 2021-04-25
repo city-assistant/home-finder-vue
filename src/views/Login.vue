@@ -24,7 +24,7 @@ export default {
   methods: {
     login() {
       axios
-        .post(store.state.BACK_SERVER_LOCAL + "loginUser", {
+        .post(store.state.SPRING_SERVER + "loginUser", {
           userId: this.currentId,
           userPw: this.currentPw,
         })

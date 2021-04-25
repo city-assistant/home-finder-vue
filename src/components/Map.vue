@@ -7,6 +7,7 @@
 
 <script>
 import axios from "axios";
+import store from "../store/store"
 import townInfo from "./TownInfo.vue";
 import constant from "../store/constant";
 import eventbus from "../store/EventBus";
@@ -191,7 +192,6 @@ export default {
         strokeOpacity: 1,
         fillColor:
           "#" +
-          // "ffff" +
           (16 - degree).toString(16) +
           (16 - degree).toString(16) +
           "abfa",
@@ -226,49 +226,11 @@ export default {
       this.cityMarkerList.push(marker);
     },
     getTranslatedDataWithLocation() {
-      axios
-        .post("http://localhost:9200/officetel-rent-data/_search", {
-          size: 0,
-          query: {
-            bool: {
-              must: [
-                { prefix: { 시군구: "서울" } },
-                { match: { 전월세구분: "월세" } },
-              ],
-              filter: [{ range: { yyyymmdd: { gte: 20200000 } } }],
-            },
-          },
-          aggs: {
-            group_by_state: {
-              terms: {
-                size: 10000000,
-                field: "시군구",
-              },
-              aggs: {
-                면적: { avg: { field: "area" } },
-                보증금: { avg: { field: "deposit" } },
-                월세: { avg: { field: "rent" } },
-                location: { geo_bounds: { field: "location" } },
-                translated: {
-                  bucket_script: {
-                    buckets_path: {
-                      v1: "면적",
-                      v2: "월세",
-                      v3: "보증금",
-                    },
-                    script:
-                      "(params.v2 + params.v3 * 0.06 /12) / params.v1 * 33",
-                  },
-                },
-              },
-            },
-          },
-        })
+      axios.get(store.state.SPRING_SERVER + "getTranslatedDataWithLocation")
         .then((res) => {
           let val = res.data.aggregations.group_by_state.buckets;
           for (let data of val) {
             if (data.location.bounds) {
-              // data.translated
               let lat = data.location.bounds.top_left.lat;
               let long = data.location.bounds.top_left.lon;
               let degree = parseInt((data.translated.value * 10) / 200);
@@ -276,32 +238,6 @@ export default {
             }
           }
           this.$emit("citiesResultUpdate", val);
-        });
-    },
-    getLocationGeo(city) {
-      axios
-        .post("http://localhost:9200/korea-geojson-data/_search", {
-          size: 10,
-          query: {
-            prefix: {
-              "adm_nm.keyword": {
-                value:
-                  city.split(" ")[0] +
-                  " " +
-                  city.split(" ")[1] +
-                  " " +
-                  city.split(" ")[2][0] +
-                  city.split(" ")[2][1],
-              },
-            },
-          },
-        })
-        .then((res) => {
-          let polygonPath = [];
-          for (let point of res.data.hits.hits[0]._source.coordinates
-            .coordinates[0][0]) {
-            polygonPath.push(new kakao.maps.LatLng(point[1], point[0]));
-          }
         });
     },
     alterCurrentData(val) {

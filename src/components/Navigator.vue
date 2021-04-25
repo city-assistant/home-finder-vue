@@ -61,7 +61,7 @@ import FilterItems from "./FilterItems.vue";
 import CitiesResult from "./CitiesResult.vue"
 import IntermediateResult from "./IntermediateResult.vue";
 import Map from "../components/Map.vue";
-
+import store from "../store/store"
 import axios from "axios";
 
 export default {
@@ -119,82 +119,32 @@ export default {
       this.rent = val;
     },
     searchCities() {
-      
-      console.log(this.townInfoVisible);
       this.townInfoVisible = false;
-      console.log(this.townInfoVisible);
       let translatedMin =
         ((this.rent[0] + (this.deposit[0] * 0.05) / 12) * 33) / this.area;
       let translatedMax =
         ((this.rent[1] + (this.deposit[1] * 0.05) / 12) * 33) / this.area;
-      axios
-        .post("http://localhost:9200/officetel-rent-data/_search", {
-          size: 0,
-          query: {
-            bool: {
-              must: [
-                { prefix: { 시군구: this.searchAddress } },
-                { match: { 전월세구분: this.leaseType } },
-              ],
-              filter: [
-                { range: { yyyymmdd: { gte: 20200000 } } },
-                {
-                  geo_distance: {
-                    distance: this.distance + "km",
-                    location: {
-                      lat: this.chosenPoint[0],
-                      lon: this.chosenPoint[1],
-                    },
-                  },
-                },
-              ],
-            },
-          },
-          aggs: {
-            group_by_state: {
-              terms: { size: 10000000, field: "시군구" },
-              aggs: {
-                location: { geo_bounds: { field: "location" } },
-                면적: { avg: { field: "area" } },
-                보증금: { avg: { field: "deposit" } },
-                월세: { avg: { field: "rent" } },
-                translated: {
-                  bucket_script: {
-                    buckets_path: {
-                      v1: "면적",
-                      v2: "월세",
-                      v3: "보증금",
-                    },
-                    script:
-                      "(params.v2 + params.v3 * 0.06 /12) / params.v1 * 33",
-                  },
-                },
-                필터: {
-                  bucket_selector: {
-                    buckets_path: {
-                      v1: "translated",
-                    },
-                    script:
-                      translatedMin +
-                      " < params.v1" +
-                      " && " +
-                      "params.v1 < " +
-                      translatedMax,
-                  },
-                },
-              },
-            },
-          },
-        })
-        .then((res) => {
+      axios.post(store.state.SPRING_SERVER + "searchCities", {
+            city: this.searchAddress,
+            leaseType: this.leaseType,
+            distance: this.distance,
+            lat: this.chosenPoint[0],
+            lon: this.chosenPoint[1],
+            translatedMin: translatedMin,
+            translatedMax: translatedMax
+          },{headers:{Authorization:"Bearer " + this.$cookies.get("userToken")}}
+        ).then((res) => {
+          console.log(res.data);
           this.searchCitiesResult =
             res.data.aggregations.group_by_state.buckets;
           this.citiesResult = this.searchCitiesResult
+        }).catch(err => {
+          alert(err);
         });
     },
     searchQuery(val) {
       axios
-        .post("http://localhost:9200/officetel-rent-data/_search", {
+        .post(store.state.SPRING_SERVER + "stringTest", {
           size: 1000,
           query: {
             bool: {
@@ -226,26 +176,10 @@ export default {
       cb(results);
     },
     loadAll() {
-      axios
-        .post("http://localhost:9200/officetel-rent-data/_search", {
-          size: 0,
-          query: {
-            prefix: {
-              시군구: {
-                value: "서울",
-              },
-            },
-          },
-          aggs: {
-            group_by_state: {
-              terms: {
-                size: 10000000,
-                field: "시군구",
-              },
-            },
-          },
-        })
-        .then((res) => {
+      let userToken = this.$cookies.get("userToken");
+      axios.post(store.state.SPRING_SERVER + "getAllCities", "",
+        { headers: { Authorization: "Bearer " + userToken } }
+        ).then((res) => {
           res.data.aggregations.group_by_state.buckets.map((val) => {
             this.links.push({ value: val.key });
           });
@@ -284,12 +218,10 @@ export default {
           });
         }
       }
-      console.log(this.newOfficeName);
     },
   },
   mounted() {
     this.loadAll();
-    // this.searchCities();
   },
 };
 </script>
