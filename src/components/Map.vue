@@ -209,13 +209,12 @@ export default {
       });
 
       kakao.maps.event.addListener(marker, "click", () => {
-        
+        this.cityMarkerList.map((marker) => marker.setMap(null));
         this.map.panTo(new kakao.maps.LatLng(lat, long));
         this.map.setLevel(4);
 
         if (this.currentData == city) {
           this.map.panTo(marker.getPosition());
-          this.cityMarkerList.map((marker) => marker.setMap(null));
           this.$emit("updateTownInfoVisible", true);
         } else {
           this.currentData = city;

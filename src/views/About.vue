@@ -25,7 +25,7 @@
           >
           <el-button type="primary" icon="el-icon-search" v-on:click="analyze"
             >Analyze</el-button
-          ><br><br>
+          ><br /><br />
         </div>
       </div>
       <div class="reportCharts">
@@ -35,13 +35,13 @@
       </div>
 
       <div class="reportBottom">
-        <br>
-        예상은 어디까지나 참고용입니다. <br><br>
+        <br />
+        예상은 어디까지나 참고용입니다. <br /><br />
 
         여기서의 합계 지수는, 월세 + 보증금 * 전월세전환률 / 12개월 의 수치로,
         평균 전월세 전환률은 약 5~6프로로 추산합니다. <br /><br />
         <button v-on:click="saveData">분석 리포트 다운로드</button>
-        <br><br>
+        <br /><br />
       </div>
     </div>
   </div>
@@ -132,12 +132,11 @@ export default {
       download(jsonData, "json.txt", "text/plain");
     },
     getAllCities: function() {
-      axios.get(store.state.SPRING_SERVER + "getAllCities"
-        ).then((res) => {
-          res.data.aggregations.group_by_state.buckets.map((val) => {
-            this.allCitys.push({ value: val.key });
-          });
+      axios.get(store.state.SPRING_SERVER + "getAllCities").then((res) => {
+        res.data.aggregations.group_by_state.buckets.map((val) => {
+          this.allCitys.push({ value: val.key });
         });
+      });
     },
     getData: function() {
       let userToken = this.$cookies.get("userToken");
@@ -169,7 +168,7 @@ export default {
         });
     },
     querySearch(queryString, cb) {
-      var results = this.allCitys.filter((el) => {
+      let results = this.allCitys.filter((el) => {
         return el.value.match(queryString);
       });
       cb(results);

@@ -308,4 +308,10 @@ button:hover {
   #myPage .wrapper {
     grid-template-columns: 1fr;
   }
+
+  /* #IntermediateResult {
+    position: fixed;
+    height: 300px;
+    bottom: 0;
+  } */
 }

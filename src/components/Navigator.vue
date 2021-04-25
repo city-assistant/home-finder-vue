@@ -52,16 +52,19 @@
       v-on:currentDataUpdate="currentDataUpdate"
       v-on:citiesResultUpdate="citiesResultUpdate"
     />
-    <CitiesResult v-if="!townInfoVisible && citiesResult != []" :searchResult="citiesResult" />
+    <CitiesResult
+      v-if="!townInfoVisible && citiesResult != []"
+      :searchResult="citiesResult"
+    />
   </div>
 </template>
 
 <script>
 import FilterItems from "./FilterItems.vue";
-import CitiesResult from "./CitiesResult.vue"
+import CitiesResult from "./CitiesResult.vue";
 import IntermediateResult from "./IntermediateResult.vue";
 import Map from "../components/Map.vue";
-import store from "../store/store"
+import store from "../store/store";
 import axios from "axios";
 
 export default {
@@ -83,7 +86,7 @@ export default {
       newOfficeName: [],
       searchCitiesResult: [],
       townInfoVisible: false,
-      citiesResult: []
+      citiesResult: [],
     };
   },
   components: { FilterItems, IntermediateResult, Map, CitiesResult },
@@ -104,7 +107,10 @@ export default {
       this.areaUpdate = val;
     },
     chosenPointUpdate(val) {
-      this.chosenPoint = [parseInt(val[0]*100)/100, parseInt(val[1]*100)/100];
+      this.chosenPoint = [
+        parseInt(val[0] * 100) / 100,
+        parseInt(val[1] * 100) / 100,
+      ];
     },
     distanceUpdate(val) {
       this.distance = val;
@@ -124,44 +130,39 @@ export default {
         ((this.rent[0] + (this.deposit[0] * 0.05) / 12) * 33) / this.area;
       let translatedMax =
         ((this.rent[1] + (this.deposit[1] * 0.05) / 12) * 33) / this.area;
-      axios.post(store.state.SPRING_SERVER + "searchCities", {
+      axios
+        .post(
+          store.state.SPRING_SERVER + "searchCities",
+          {
             city: this.searchAddress,
             leaseType: this.leaseType,
             distance: this.distance,
             lat: this.chosenPoint[0],
             lon: this.chosenPoint[1],
             translatedMin: translatedMin,
-            translatedMax: translatedMax
-          },{headers:{Authorization:"Bearer " + this.$cookies.get("userToken")}}
-        ).then((res) => {
+            translatedMax: translatedMax,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + this.$cookies.get("userToken"),
+            },
+          }
+        )
+        .then((res) => {
           console.log(res.data);
           this.searchCitiesResult =
             res.data.aggregations.group_by_state.buckets;
-          this.citiesResult = this.searchCitiesResult
-        }).catch(err => {
+          this.citiesResult = this.searchCitiesResult;
+        })
+        .catch((err) => {
           alert(err);
         });
     },
     searchQuery(val) {
       axios
-        .post(store.state.SPRING_SERVER + "stringTest", {
-          size: 1000,
-          query: {
-            bool: {
-              must: [
-                {
-                  prefix: {
-                    시군구: val,
-                  },
-                },
-                {
-                  match: {
-                    전월세구분: this.leaseType,
-                  },
-                },
-              ],
-            },
-          },
+        .post(store.state.SPRING_SERVER + "searchQuery", {
+          city: val,
+          leaseType: this.leaseType,
         })
         .then((res) => {
           this.searchResult = res.data.hits.hits;
@@ -170,20 +171,17 @@ export default {
     },
     searchArround() {},
     querySearch(queryString, cb) {
-      var results = this.links.filter((el) => {
+      let results = this.links.filter((el) => {
         return el.value.match(queryString);
       });
       cb(results);
     },
     loadAll() {
-      let userToken = this.$cookies.get("userToken");
-      axios.post(store.state.SPRING_SERVER + "getAllCities", "",
-        { headers: { Authorization: "Bearer " + userToken } }
-        ).then((res) => {
-          res.data.aggregations.group_by_state.buckets.map((val) => {
-            this.links.push({ value: val.key });
-          });
+      axios.get(store.state.SPRING_SERVER + "getAllCities").then((res) => {
+        res.data.aggregations.group_by_state.buckets.map((val) => {
+          this.links.push({ value: val.key });
         });
+      });
     },
     handleSelect(item) {
       console.log(item);

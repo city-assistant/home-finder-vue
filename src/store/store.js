@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import constant from './constant'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    SPRING_SERVER: 'http://localhost:8090/',
-    BACK_SERVER_LOCAL: 'http://localhost:8090/',
-    BACK_SERVER_REAL: 'http://studioj.ddns.net:8090/',
+    // SPRING_SERVER: 'http://122.34.73.231:8090/',
+    SPRING_SERVER: constant.state.BACK_SERVER_REAL,
   },
   mutations: {
   },
