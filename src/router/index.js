@@ -33,4 +33,13 @@ const router = new VueRouter({
   routes
 })
 
+router.beforeEach(function(to, from, next) {
+  if (routes.map(val => val.path).indexOf(to.path) >= 0) {
+    next();
+  } else {
+    alert('잘못된 접근입니다.')
+    router.push("/");
+  }
+});
+
 export default router

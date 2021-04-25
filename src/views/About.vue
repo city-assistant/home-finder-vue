@@ -1,7 +1,6 @@
 <template>
   <div>
     <div id="loading" v-if="loading"></div>
-    <div v-if="this.$cookies.get('userToken')">
       <br />분석 페이지 <br />
       <br /><br /><br />
       <div class="top-long-box">
@@ -44,7 +43,6 @@
         <br /><br />
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -70,16 +68,20 @@ export default {
     };
   },
   created: function() {
-    this.getData();
+    if (this.$cookies.get("userToken")) {
+      this.getData();
+    } else {
+      alert("로그인해주세요");
+      this.$router.push('/login');
+    }
   },
   methods: {
     analyze: function() {
       this.loading = true;
-      axios
-        .post("http://localhost:5000/", {
-          data: this.forAnalyze,
-        })
-        .then((res) => {
+      axios.post(store.state.SPRING_SERVER + 'flask', 
+        {data: this.forAnalyze},
+        {headers:{Authorization: "Bearer " + this.$cookies.get("userToken")}}
+        ).then((res) => {
           let testLabels = [];
           for (let i = 1; i <= 12; i++) {
             testLabels.push(13 - i + "개월 전");

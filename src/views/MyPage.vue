@@ -31,9 +31,13 @@ export default {
   components: {
     LineChart,
   },
-  created: function() {},
   mounted: function() {
-    this.getUserInterestList();
+    if (this.$cookies.get("userToken")) {
+      this.getUserInterestList();
+    } else {
+      alert("로그인해주세요");
+      this.$router.push('/login');
+    }
   },
   data() {
     return {
