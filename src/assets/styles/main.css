@@ -22,6 +22,7 @@ body {
   right: 0;
   height: 100px;
   z-index: 6;
+  
 }
 
 .navBar #title {
@@ -54,19 +55,39 @@ body {
   left: 10px;
   height: 120px;
   z-index:7;
-  box-shadow: #2c3e50;
+  background: rgba(255, 255, 255, 0.616);
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 4px );
+  -webkit-backdrop-filter: blur( 4px );
+  border-radius: 10px;
 }
  
 .sidebar a {
-font-weight: bold;
-color: #2c3e50;
+  font-weight: bold;
+  color: #2c3e50;
 }
 
 .sidebar a.router-link-exact-active {
-color: #42b983;
+  color: #42b983;
+}
+
+.homeTypeSelector {
+  margin-top: 10px;
+  border: 1px solid #257cdf86;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.616);
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 4px );
+  -webkit-backdrop-filter: blur( 4px );
+  border-radius: 10px;
 }
 
 #filters {
+  border-radius: 10px;
+  background: rgba( 255, 255, 255, 0.25 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 4px );
+  -webkit-backdrop-filter: blur( 4px );
   border-radius: 10px;
 }
 
@@ -80,6 +101,11 @@ color: #42b983;
   border-radius: 10px;
   z-index:2;
   font-size: x-small;
+  background: rgba( 255, 255, 255, 0.25 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 4px );
+  -webkit-backdrop-filter: blur( 4px );
+  border-radius: 10px;
 }
 
 #townInfo {
@@ -94,22 +120,41 @@ color: #42b983;
   left: 10px;
   z-index: 8;
   transition: 1s;
+  background: rgba( 255, 255, 255, 0.25 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 4px );
+  -webkit-backdrop-filter: blur( 4px );
+  border-radius: 10px;
 }
 
 .el-menu {
   border-radius: 10px;
   border: 1px solid #257cdf86;
+  background: rgba( 255, 255, 255, 0.25 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 4px );
+  -webkit-backdrop-filter: blur( 4px );
+  border-radius: 10px;
   /* border-bottom: 1px solid #257cdf86;
   border-right: 1px solid #257cdf86;
   border-left: 1px solid #257cdf86; */
 }
 
 .el-submenu__title {
-  /* border-top: 1px solid #257cdf86; */
+  background: rgba( 255, 255, 255, 0.25 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 4px );
+  -webkit-backdrop-filter: blur( 4px );
   border-radius: 10px;
+  /* border-top: 1px solid #257cdf86; */
 }
 
 #townInfo .insideTownInfo {
+  background: rgba( 255, 255, 255, 0.25 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 4px );
+  -webkit-backdrop-filter: blur( 4px );
+  border-radius: 10px;
   border-radius: 10px;
   height: 80vh;
   overflow-y: scroll;

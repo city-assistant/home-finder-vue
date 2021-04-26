@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="sidebar">
+    <div class="sidebar"><br>
       <div class="sub-title" v-if="!townInfoVisible">
         목적지 위치 : {{ chosenPoint }}
       </div>
@@ -20,14 +20,6 @@
         v-if="!townInfoVisible"
         >Search</el-button
       >
-      <div v-if="!townInfoVisible">
-        <el-radio-group v-model="homeType" size="mini">
-          <el-radio-button label="officetel">오피스텔</el-radio-button>
-          <el-radio-button label="apartment">아파트</el-radio-button>
-          <el-radio-button label="single">단독다가구</el-radio-button>
-          <el-radio-button label="multiple">연립다세대</el-radio-button>
-        </el-radio-group>
-      </div>
       <el-button
         type="primary"
         icon="el-icon-back"
@@ -48,6 +40,16 @@
           v-on:depositUpdate="depositUpdate"
           v-on:leaseTypeUpdate="leaseTypeUpdate"
         />
+      </div>
+      <div class="homeTypeSelector" v-if="!townInfoVisible">
+        <br>
+        <el-radio-group v-model="homeType" size="mini">
+          <el-radio-button label="officetel">오피스텔</el-radio-button>
+          <el-radio-button label="apartment">아파트</el-radio-button>
+          <el-radio-button label="single">단독다가구</el-radio-button>
+          <el-radio-button label="multiple">연립다세대</el-radio-button>
+        </el-radio-group>
+        <br><br>
       </div>
     </div>
     <IntermediateResult
