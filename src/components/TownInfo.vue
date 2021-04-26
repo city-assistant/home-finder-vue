@@ -62,7 +62,7 @@ export default {
   },
   props: {
     currentData: String,
-    homeType: String
+    homeType: String,
   },
   data() {
     return {
@@ -140,7 +140,10 @@ export default {
     },
     getChartData(val) {
       axios
-        .post(store.state.SPRING_SERVER + "getChartData", { city: val, homeType: this.homeType })
+        .post(store.state.SPRING_SERVER + "getChartData", {
+          city: val,
+          homeType: this.homeType,
+        })
         .then((res) => {
           console.log(res.data);
           let labels = [];

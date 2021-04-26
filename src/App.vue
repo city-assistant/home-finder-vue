@@ -1,24 +1,22 @@
 <template>
   <div id="app">
-    <NavBar/>
-    <router-view/>
+    <NavBar />
+    <router-view />
   </div>
 </template>
 
-<style src='@/assets/styles/main.css'>
-</style>
+<style src="@/assets/styles/main.css"></style>
 
 <script>
-import NavBar from './components/NavBar';
+import NavBar from "./components/NavBar";
 
 export default {
-  name: 'App',
+  name: "App",
   data() {
-    return {
-    }
+    return {};
   },
   components: {
-    NavBar
-  }
-}
+    NavBar,
+  },
+};
 </script>

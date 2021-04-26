@@ -1,7 +1,7 @@
 <template>
   <div class="filter">
     <el-menu default-active="true" background-color="#ffffff">
-      <el-submenu index="" >
+      <el-submenu index="">
         <h5>소요시간(준비중)</h5>
         <!-- 목적지까지 소요시간 -->
         <el-input-number
@@ -31,7 +31,7 @@
             <!-- <el-radio-button label="매매"></el-radio-button> -->
           </el-radio-group>
         </div>
-        <br><br>면적
+        <br /><br />면적
         <div class="block">
           <el-slider
             style="margin: 10px"
@@ -75,32 +75,37 @@
 <script>
 export default {
   name: "FilterItems",
+  props: {
+    deposit: Array,
+    rent: Array,
+    area: Number,
+    distance: Number,
+  },
   data() {
     return {
-      distance: 5,
-      rentStep: 10, depositStep: 100, areaStep: 10, timeStep: 1,
+      rentStep: 10,
+      depositStep: 100,
+      areaStep: 10,
+      timeStep: 1,
       num: 15,
       leaseType: "월세",
-      deposit: [0, 5000],
-      rent: [0, 50],
-      area: 30
     };
   },
   watch: {
     area: function(val) {
-      this.$emit("areaUpdate", val)
+      this.$emit("areaUpdate", val);
     },
     distance: function(val) {
-      this.$emit("distanceUpdate", val)
+      this.$emit("distanceUpdate", val);
     },
     leaseType: function(val) {
-      this.$emit("leaseTypeUpdate", val)
+      this.$emit("leaseTypeUpdate", val);
     },
     deposit: function(val) {
-      this.$emit("depositUpdate", val)
+      this.$emit("depositUpdate", val);
     },
     rent: function(val) {
-      this.$emit("rentUpdate", val)
+      this.$emit("rentUpdate", val);
     },
   },
   methods: {

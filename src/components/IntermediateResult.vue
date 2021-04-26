@@ -22,10 +22,11 @@
 
       <el-table-column type="expand">
         <template slot-scope="scope">
-        <intermediate-result-list
-        :searchResult="searchResult"
-        :officeName="scope.row.road"/>
-      </template>
+          <intermediate-result-list
+            :searchResult="searchResult"
+            :officeName="scope.row.road"
+          />
+        </template>
       </el-table-column>
     </el-table>
   </div>
@@ -49,10 +50,7 @@ export default {
   },
   methods: {
     emitAddress(val) {
-      this.$emit(
-        "emitAddress",
-        val
-      );
+      this.$emit("emitAddress", val);
     },
   },
 };

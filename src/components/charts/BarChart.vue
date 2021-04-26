@@ -5,39 +5,38 @@
 </template>
 
 <script>
-  import BarChart from '../../assets/scripts/BarChart.module.js'
+import BarChart from "../../assets/scripts/BarChart.module.js";
 
-  export default {
-    components: {
-      BarChart
+export default {
+  components: {
+    BarChart,
+  },
+  props: {
+    passData: Object,
+  },
+  data() {
+    return {
+      datacollection: null,
+    };
+  },
+  mounted() {
+    this.fillData();
+  },
+  watch: {
+    passData: function(data) {
+      this.datacollection = {
+        labels: data.labels,
+        datasets: data.datasets,
+      };
     },
-    props: {
-      passData: Object
+  },
+  methods: {
+    fillData() {
+      this.datacollection = {
+        labels: [],
+        datasets: [],
+      };
     },
-    data () {
-      return {
-        datacollection: null
-      }
-    },
-    mounted () {
-      this.fillData()
-    },
-    watch: {
-      passData: function(data) {
-        this.datacollection = {
-          labels: data.labels,
-          datasets: data.datasets
-        }
-      }
-    },
-    methods: {
-      fillData () {
-        this.datacollection = {
-          labels: [],
-          datasets: []
-        }
-      },
-    }
-  }
+  },
+};
 </script>
-

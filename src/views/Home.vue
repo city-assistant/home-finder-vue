@@ -1,18 +1,18 @@
 <template>
-    <div class="home">
-      <div id="nav">
-        <Navigator/>
-      </div>
+  <div class="home">
+    <div id="nav">
+      <Navigator />
     </div>
+  </div>
 </template>
 
 <script>
-import Navigator from '../components/Navigator';
+import Navigator from "../components/Navigator";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
-    Navigator, 
-  }
-}
+    Navigator,
+  },
+};
 </script>

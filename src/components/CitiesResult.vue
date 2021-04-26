@@ -7,8 +7,10 @@
       max-height="auto"
     >
       <el-table-column label="지역명" prop="key"></el-table-column>
-      <el-table-column label="예상 10평당 합계 지수" prop="translated.value"></el-table-column>
-
+      <el-table-column
+        label="예상 10평당 합계 지수"
+        prop="translated.value"
+      ></el-table-column>
     </el-table>
   </div>
 </template>
@@ -21,21 +23,16 @@ export default {
     citiesResult: Array,
   },
   data() {
-    return {
-     
-    };
+    return {};
   },
   watch: {
     searchResult: function(v) {
       console.log(v);
-    }
+    },
   },
   methods: {
     emitAddress(val) {
-      this.$emit(
-        "emitAddress",
-        val
-      );
+      this.$emit("emitAddress", val);
     },
   },
 };

@@ -1,20 +1,20 @@
-html, 
+html,
 body {
-    height: 100%;
-    width: 100%;
-    margin: 0;
+  height: 100%;
+  width: 100%;
+  margin: 0;
 }
 
 #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    position: relative;
-    z-index:1;
-  }
-  
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  position: relative;
+  z-index: 1;
+}
+
 .navBar {
   border-radius: 10px;
   position: absolute;
@@ -22,7 +22,6 @@ body {
   right: 0;
   height: 100px;
   z-index: 6;
-  
 }
 
 .navBar #title {
@@ -48,20 +47,20 @@ body {
   border: 1px solid #257cdf86;
   border-radius: 10px;
   position: absolute;
-  float : left;
+  float: left;
   background-color: #ffffff;
-	width : 250px;
+  width: 250px;
   top: 10px;
   left: 10px;
   height: 120px;
-  z-index:7;
+  z-index: 7;
   background: rgba(255, 255, 255, 0.616);
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-  backdrop-filter: blur( 4px );
-  -webkit-backdrop-filter: blur( 4px );
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border-radius: 10px;
 }
- 
+
 .sidebar a {
   font-weight: bold;
   color: #2c3e50;
@@ -76,64 +75,64 @@ body {
   border: 1px solid #257cdf86;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.616);
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-  backdrop-filter: blur( 4px );
-  -webkit-backdrop-filter: blur( 4px );
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border-radius: 10px;
 }
 
 #filters {
   border-radius: 10px;
-  background: rgba( 255, 255, 255, 0.25 );
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-  backdrop-filter: blur( 4px );
-  -webkit-backdrop-filter: blur( 4px );
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border-radius: 10px;
 }
 
 #IntermediateResult {
   position: absolute;
-  float : right;
+  float: right;
   background-color: #ffffff;
-	width : 300px;
+  width: 300px;
   top: 60px;
   right: 10px;
   border-radius: 10px;
-  z-index:2;
+  z-index: 2;
   font-size: x-small;
-  background: rgba( 255, 255, 255, 0.25 );
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-  backdrop-filter: blur( 4px );
-  -webkit-backdrop-filter: blur( 4px );
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border-radius: 10px;
 }
 
 #townInfo {
   border-radius: 10px;
   position: absolute;
-  float : left;
+  float: left;
   background-color: #ffffff;
   align-items: center;
   align-content: center;
-	width : 250px;
+  width: 250px;
   top: 100px;
   left: 10px;
   z-index: 8;
   transition: 1s;
-  background: rgba( 255, 255, 255, 0.25 );
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-  backdrop-filter: blur( 4px );
-  -webkit-backdrop-filter: blur( 4px );
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border-radius: 10px;
 }
 
 .el-menu {
   border-radius: 10px;
   border: 1px solid #257cdf86;
-  background: rgba( 255, 255, 255, 0.25 );
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-  backdrop-filter: blur( 4px );
-  -webkit-backdrop-filter: blur( 4px );
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border-radius: 10px;
   /* border-bottom: 1px solid #257cdf86;
   border-right: 1px solid #257cdf86;
@@ -141,19 +140,19 @@ body {
 }
 
 .el-submenu__title {
-  background: rgba( 255, 255, 255, 0.25 );
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-  backdrop-filter: blur( 4px );
-  -webkit-backdrop-filter: blur( 4px );
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border-radius: 10px;
   /* border-top: 1px solid #257cdf86; */
 }
 
 #townInfo .insideTownInfo {
-  background: rgba( 255, 255, 255, 0.25 );
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-  backdrop-filter: blur( 4px );
-  -webkit-backdrop-filter: blur( 4px );
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   border-radius: 10px;
   border-radius: 10px;
   height: 80vh;
@@ -170,8 +169,8 @@ body {
   margin: 0;
 }
 
-ellipse:hover{ 
-  cursor:pointer
+ellipse:hover {
+  cursor: pointer;
 }
 
 /* About Page */
@@ -181,24 +180,29 @@ ellipse:hover{
 }
 
 .top-long-box {
-    background-color: rgb(144, 27, 247);
-    /* height: 15vh; */
-    max-height: 200px;
-    margin-left: 3%;
-    width: 94%;
-    justify-content: center;
-    align-items: center;
-    border-bottom: 1px solid #EBEBEB;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37);
-    backdrop-filter: blur( 6.5px);
-    -webkit-backdrop-filter: blur( 6.5px);
-    border-radius: 10px;
-    border: 1px solid rgba( 255, 255, 255, 0.18);
-    opacity: 100%;
-    background: linear-gradient( 45deg, rgb(255, 255, 255) 0%, rgb(250, 252, 255) 48%, rgba(255, 255, 255) 100%);
-    transition: 0.5s;
+  background-color: rgb(144, 27, 247);
+  /* height: 15vh; */
+  max-height: 200px;
+  margin-left: 3%;
+  width: 94%;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #ebebeb;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(6.5px);
+  -webkit-backdrop-filter: blur(6.5px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  opacity: 100%;
+  background: linear-gradient(
+    45deg,
+    rgb(255, 255, 255) 0%,
+    rgb(250, 252, 255) 48%,
+    rgba(255, 255, 255) 100%
+  );
+  transition: 0.5s;
 }
 
 .top-long-box:hover {
@@ -216,16 +220,21 @@ ellipse:hover{
   width: 94%;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid #EBEBEB;
+  border-bottom: 1px solid #ebebeb;
   margin-top: 25px;
   margin-bottom: 25px;
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37);
-  backdrop-filter: blur( 6.5px);
-  -webkit-backdrop-filter: blur( 6.5px);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(6.5px);
+  -webkit-backdrop-filter: blur(6.5px);
   border-radius: 10px;
-  border: 1px solid rgba( 255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   opacity: 100%;
-  background: linear-gradient( 45deg, rgb(255, 255, 255) 0%, rgb(250, 252, 255) 48%, rgba(255, 255, 255) 100%);
+  background: linear-gradient(
+    45deg,
+    rgb(255, 255, 255) 0%,
+    rgb(250, 252, 255) 48%,
+    rgba(255, 255, 255) 100%
+  );
   transition: 0.5s;
 }
 
@@ -249,21 +258,25 @@ ellipse:hover{
   width: 94%;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid #EBEBEB;
+  border-bottom: 1px solid #ebebeb;
   margin-top: 25px;
   margin-bottom: 25px;
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37);
-  backdrop-filter: blur( 6.5px);
-  -webkit-backdrop-filter: blur( 6.5px);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(6.5px);
+  -webkit-backdrop-filter: blur(6.5px);
   border-radius: 10px;
-  border: 1px solid rgba( 255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   opacity: 100%;
-  background: linear-gradient( 45deg, rgb(255, 255, 255) 0%, rgb(250, 252, 255) 48%, rgba(255, 255, 255) 100%);
+  background: linear-gradient(
+    45deg,
+    rgb(255, 255, 255) 0%,
+    rgb(250, 252, 255) 48%,
+    rgba(255, 255, 255) 100%
+  );
   transition: 0.5s;
   align-items: center;
   bottom: 50px;
 }
-
 
 /* user and login */
 
@@ -312,16 +325,21 @@ ellipse:hover{
   margin-left: 2%;
   /* width: 46%; */
   margin-right: 2%;
-  border-bottom: 1px solid #EBEBEB;
+  border-bottom: 1px solid #ebebeb;
   margin-top: 25px;
   margin-bottom: 25px;
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37);
-  backdrop-filter: blur( 6.5px);
-  -webkit-backdrop-filter: blur( 6.5px);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(6.5px);
+  -webkit-backdrop-filter: blur(6.5px);
   border-radius: 10px;
-  border: 1px solid rgba( 255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   opacity: 100%;
-  background: linear-gradient( 45deg, rgb(255, 255, 255) 0%, rgb(250, 252, 255) 48%, rgba(255, 255, 255) 100%);
+  background: linear-gradient(
+    45deg,
+    rgb(255, 255, 255) 0%,
+    rgb(250, 252, 255) 48%,
+    rgba(255, 255, 255) 100%
+  );
   transition: 0.5s;
   vertical-align: middle;
 }
@@ -341,14 +359,13 @@ ellipse:hover{
   margin-left: 10px;
   background-color: aliceblue;
   border-radius: 5px;
-  border-bottom: 1px solid #EBEBEB;
+  border-bottom: 1px solid #ebebeb;
 }
 
-
 #loading {
-  width: 100vw; 
-  height: 150vh; 
-  z-index:10;
+  width: 100vw;
+  height: 150vh;
+  z-index: 10;
   background-color: black;
   position: absolute;
   opacity: 50%;
@@ -368,7 +385,7 @@ button {
 button:hover {
   color: white;
   background-color: #257cdf86;
-  cursor:pointer
+  cursor: pointer;
 }
 
 .el-table__body-wrapper {
@@ -390,10 +407,10 @@ button:hover {
     height: 300px;
     left: 0px;
     bottom: 0px;
-    float : none;
+    float: none;
     top: auto;
     border-radius: 10px;
-    z-index:2;
+    z-index: 2;
     font-size: x-small;
     overflow: hidden;
   }

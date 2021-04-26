@@ -1,61 +1,61 @@
 <template>
-  <div>
+  <div id="aboutAnalyze">
     <div id="loading" v-if="loading"></div>
-      <br />분석 페이지 <br />
-      <br /><br /><br />
-      <div class="top-long-box">
-        <br>
-          <el-radio-group v-model="homeType" size="mini">
-            <el-radio-button label="officetel">오피스텔</el-radio-button>
-            <!-- <el-radio-button label="apartment">아파트</el-radio-button> -->
-            <el-radio-button label="single">단독다가구</el-radio-button>
-            <el-radio-button label="multiple">연립다세대</el-radio-button>
-          </el-radio-group>
-        <br />
-        한정지을 지역은 넓은 곳에서부터 prefix 개념으로 사용됩니다. (ex.
-        아무것도 안 쓸 경우 전국, '서울특별시' 까지 쓸 경우 서울특별시,
-        '서울특별시 마포구' 까지 쓸 경우 마포구까지 한정됩니다. 시/도 부터
-        써주셔야 합니다.)
-        <br /><br />
-        <div class="searchReprt">
-          <el-autocomplete
-            class="inline-input"
-            v-model="city"
-            :fetch-suggestions="querySearch"
-            placeholder="한정지을 지역(선택)"
-            :trigger-on-focus="false"
-            @select="handleSelect"
-          ></el-autocomplete>
-          <el-button type="primary" icon="el-icon-search" v-on:click="getData"
-            >Search</el-button
-          >
-          <el-button type="primary" icon="el-icon-search" v-on:click="analyze"
-            >Analyze</el-button
-          ><br /><br />
-        </div>
-      </div>
-      <div class="reportCharts">
-        <LineChart class="chart" :passData="passData" />
-        <LineChart class="miniChart" :passData="passTestedData" />
-        <LineChart class="miniChart" :passData="passAnalyzedData" />
-      </div>
-
-      <div class="reportBottom">
-        <br />
-        예상은 어디까지나 참고용입니다. <br /><br />
-
-        여기서의 합계 지수는, 월세 + 보증금 * 전월세전환률 / 12개월 의 수치로,
-        평균 전월세 전환률은 약 5~6프로로 추산합니다. <br /><br />
-        <button v-on:click="saveData">분석 리포트 다운로드</button>
-        <br /><br />
+    <br />분석 페이지 <br />
+    <br /><br /><br />
+    <div class="top-long-box">
+      <br />
+      <el-radio-group v-model="homeType" size="mini">
+        <el-radio-button label="officetel">오피스텔</el-radio-button>
+        <!-- <el-radio-button label="apartment">아파트</el-radio-button> -->
+        <el-radio-button label="single">단독다가구</el-radio-button>
+        <el-radio-button label="multiple">연립다세대</el-radio-button>
+      </el-radio-group>
+      <br />
+      한정지을 지역은 넓은 곳에서부터 prefix 개념으로 사용됩니다. (ex. 아무것도
+      안 쓸 경우 전국, '서울특별시' 까지 쓸 경우 서울특별시, '서울특별시 마포구'
+      까지 쓸 경우 마포구까지 한정됩니다. 시/도 부터 써주셔야 합니다.)
+      <br /><br />
+      <div class="searchReprt">
+        <el-autocomplete
+          class="inline-input"
+          v-model="city"
+          :fetch-suggestions="querySearch"
+          placeholder="한정지을 지역(선택)"
+          :trigger-on-focus="false"
+          @select="handleSelect"
+        ></el-autocomplete>
+        <el-button type="primary" icon="el-icon-search" v-on:click="getData"
+          >Search</el-button
+        >
+        <el-button type="primary" icon="el-icon-search" v-on:click="analyze"
+          >Analyze</el-button
+        ><br /><br />
       </div>
     </div>
+    <div class="reportCharts">
+      <LineChart class="chart" :passData="passData" />
+      <LineChart class="miniChart" :passData="passTestedData" />
+      <LineChart class="miniChart" :passData="passAnalyzedData" />
+    </div>
+
+    <div class="reportBottom">
+      <br />
+      예상은 어디까지나 참고용입니다. <br /><br />
+
+      여기서의 합계 지수는, 월세 + 보증금 * 전월세전환률 / 12개월 의 수치로,
+      평균 전월세 전환률은 약 5~6프로로 추산합니다. <br /><br />
+      <button v-on:click="saveData">분석 리포트 다운로드</button>
+      <br /><br />
+    </div>
+  </div>
 </template>
 
 <script>
 import LineChart from "../components/charts/LineChart";
 import store from "../store/store";
 import axios from "axios";
+import html2canvas from "html2canvas";
 
 export default {
   name: "About",
@@ -72,29 +72,36 @@ export default {
       passAnalyzedData: {},
       passTestedData: {},
       loading: false,
-      homeType: "officetel"
+      homeType: "officetel",
     };
   },
   watch: {
     homeType: function() {
-      this.getData()
-    }
+      this.getData();
+    },
   },
   created: function() {
     if (this.$cookies.get("userToken")) {
       this.getData();
     } else {
       alert("로그인해주세요");
-      this.$router.push('/login');
+      this.$router.push("/login");
     }
   },
   methods: {
     analyze: function() {
       this.loading = true;
-      axios.post(store.state.SPRING_SERVER + 'flask', 
-        {data: this.forAnalyze},
-        {headers:{Authorization: "Bearer " + this.$cookies.get("userToken")}}
-        ).then((res) => {
+      axios
+        .post(
+          store.state.SPRING_SERVER + "flask",
+          { data: this.forAnalyze },
+          {
+            headers: {
+              Authorization: "Bearer " + this.$cookies.get("userToken"),
+            },
+          }
+        )
+        .then((res) => {
           let testLabels = [];
           for (let i = 1; i <= 12; i++) {
             testLabels.push(13 - i + "개월 전");
@@ -133,25 +140,25 @@ export default {
         });
     },
     saveData: function() {
-      let data = this.allDatas;
-
-      let jsonData = JSON.stringify(data);
-
-      function download(content, fileName, contentType) {
-        var a = document.createElement("a");
-        var file = new Blob([content], { type: contentType });
-        a.href = URL.createObjectURL(file);
-        a.download = fileName;
-        a.click();
-      }
-      download(jsonData, "json.txt", "text/plain");
+      html2canvas(document.getElementById("aboutAnalyze")).then(function(
+        canvas
+      ) {
+        let link = document.createElement("a");
+        link.download = "report.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      });
     },
     getAllCities: function() {
-      axios.post(store.state.SPRING_SERVER + "getAllCities", {homeType: this.homeType}).then((res) => {
-        res.data.aggregations.group_by_state.buckets.map((val) => {
-          this.allCitys.push({ value: val.key });
+      axios
+        .post(store.state.SPRING_SERVER + "getAllCities", {
+          homeType: this.homeType,
+        })
+        .then((res) => {
+          res.data.aggregations.group_by_state.buckets.map((val) => {
+            this.allCitys.push({ value: val.key });
+          });
         });
-      });
     },
     getData: function() {
       let userToken = this.$cookies.get("userToken");

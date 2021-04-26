@@ -3,8 +3,8 @@
     <br /><br /><br /><br /><br /><br />
     MyPage
     <button v-on:click="logOut">
-      logout
-    </button><br><br>
+      logout</button
+    ><br /><br />
     <el-radio-group v-model="homeType" size="mini">
       <el-radio-button label="officetel">오피스텔</el-radio-button>
       <!-- <el-radio-button label="apartment">아파트</el-radio-button> -->
@@ -42,7 +42,7 @@ export default {
       this.getUserInterestList();
     } else {
       alert("로그인해주세요");
-      this.$router.push('/login');
+      this.$router.push("/login");
     }
   },
   data() {
@@ -50,13 +50,13 @@ export default {
       userSavedList: [],
       passData: {},
       loaded: {},
-      homeType: "officetel"
+      homeType: "officetel",
     };
   },
   watch: {
     homeType: function() {
-      this.getUserInterestList()
-    }
+      this.getUserInterestList();
+    },
   },
   methods: {
     getCityData(injectData) {
