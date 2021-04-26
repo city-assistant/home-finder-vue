@@ -15,7 +15,7 @@
           </el-col>
         </template>
       </el-table-column> -->
-      <el-table-column id="offiName" label="오피스텔명" prop="value">
+      <el-table-column id="offiName" label="도로명" prop="value">
       </el-table-column>
 
       <el-table-column label="지역명" prop="addr"> </el-table-column>

@@ -7,7 +7,7 @@
         <br>
           <el-radio-group v-model="homeType" size="mini">
             <el-radio-button label="officetel">오피스텔</el-radio-button>
-            <el-radio-button label="apartment">아파트</el-radio-button>
+            <!-- <el-radio-button label="apartment">아파트</el-radio-button> -->
             <el-radio-button label="single">단독다가구</el-radio-button>
             <el-radio-button label="multiple">연립다세대</el-radio-button>
           </el-radio-group>
