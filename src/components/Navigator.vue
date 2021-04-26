@@ -20,6 +20,14 @@
         v-if="!townInfoVisible"
         >Search</el-button
       >
+      <div v-if="!townInfoVisible">
+        <el-radio-group v-model="homeType" size="mini">
+          <el-radio-button label="officetel">오피스텔</el-radio-button>
+          <el-radio-button label="apartment">아파트</el-radio-button>
+          <el-radio-button label="single">단독다가구</el-radio-button>
+          <el-radio-button label="multiple">연립다세대</el-radio-button>
+        </el-radio-group>
+      </div>
       <el-button
         type="primary"
         icon="el-icon-back"
@@ -27,8 +35,13 @@
         v-if="townInfoVisible"
         >Back</el-button
       >
+      <div v-if="townInfoVisible">
+        <br />
+        자세히 보기
+      </div>
       <div id="filters" v-if="!townInfoVisible">
         <filter-items
+          :homeType="homeType"
           v-on:areaUpdate="areaUpdate"
           v-on:distanceUpdate="distanceUpdate"
           v-on:rentUpdate="rentUpdate"
@@ -47,6 +60,7 @@
       :searchResult="searchResult"
       :searchCitiesResult="searchCitiesResult"
       :townInfoVisible="townInfoVisible"
+      :homeType="homeType"
       v-on:updateTownInfoVisible="updateTownInfoVisible"
       v-on:chosenPointUpdate="chosenPointUpdate"
       v-on:currentDataUpdate="currentDataUpdate"
@@ -75,6 +89,8 @@ export default {
       links: [],
       searchAddress: "",
       leaseType: "월세",
+      // homeTypeMap: {"오피스텔":"officetel","아파트":"apartment","단독다가구":"single","연립다세대":"multiple"},
+      homeType: "officetel",
       distance: 5,
       deposit: [0, 5000],
       rent: [0, 50],
@@ -88,6 +104,9 @@ export default {
       townInfoVisible: false,
       citiesResult: [],
     };
+  },
+  watch: {
+    homeType: function() {},
   },
   components: { FilterItems, IntermediateResult, Map, CitiesResult },
   methods: {
@@ -141,6 +160,7 @@ export default {
             lon: this.chosenPoint[1],
             translatedMin: translatedMin,
             translatedMax: translatedMax,
+            homeType: this.homeType,
           },
           {
             headers: {
@@ -163,6 +183,7 @@ export default {
         .post(store.state.SPRING_SERVER + "searchQuery", {
           city: val,
           leaseType: this.leaseType,
+          homeType: this.homeType,
         })
         .then((res) => {
           this.searchResult = res.data.hits.hits;
@@ -177,11 +198,15 @@ export default {
       cb(results);
     },
     loadAll() {
-      axios.get(store.state.SPRING_SERVER + "getAllCities").then((res) => {
-        res.data.aggregations.group_by_state.buckets.map((val) => {
-          this.links.push({ value: val.key });
+      axios
+        .post(store.state.SPRING_SERVER + "getAllCities", {
+          homeType: this.homeType,
+        })
+        .then((res) => {
+          res.data.aggregations.group_by_state.buckets.map((val) => {
+            this.links.push({ value: val.key });
+          });
         });
-      });
     },
     handleSelect(item) {
       console.log(item);

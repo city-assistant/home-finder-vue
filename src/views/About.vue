@@ -4,6 +4,13 @@
       <br />분석 페이지 <br />
       <br /><br /><br />
       <div class="top-long-box">
+        <br>
+          <el-radio-group v-model="homeType" size="mini">
+            <el-radio-button label="officetel">오피스텔</el-radio-button>
+            <el-radio-button label="apartment">아파트</el-radio-button>
+            <el-radio-button label="single">단독다가구</el-radio-button>
+            <el-radio-button label="multiple">연립다세대</el-radio-button>
+          </el-radio-group>
         <br />
         한정지을 지역은 넓은 곳에서부터 prefix 개념으로 사용됩니다. (ex.
         아무것도 안 쓸 경우 전국, '서울특별시' 까지 쓸 경우 서울특별시,
@@ -65,7 +72,13 @@ export default {
       passAnalyzedData: {},
       passTestedData: {},
       loading: false,
+      homeType: "officetel"
     };
+  },
+  watch: {
+    homeType: function() {
+      this.getData()
+    }
   },
   created: function() {
     if (this.$cookies.get("userToken")) {
@@ -134,7 +147,7 @@ export default {
       download(jsonData, "json.txt", "text/plain");
     },
     getAllCities: function() {
-      axios.get(store.state.SPRING_SERVER + "getAllCities").then((res) => {
+      axios.post(store.state.SPRING_SERVER + "getAllCities", {homeType: this.homeType}).then((res) => {
         res.data.aggregations.group_by_state.buckets.map((val) => {
           this.allCitys.push({ value: val.key });
         });
@@ -145,8 +158,8 @@ export default {
       let passCity = this.city;
       axios
         .post(
-          store.state.SPRING_SERVER + "officetelPrefixSearch",
-          { city: passCity },
+          store.state.SPRING_SERVER + "prefixSearch",
+          { city: passCity, homeType: this.homeType },
           { headers: { Authorization: "Bearer " + userToken } }
         )
         .then((res) => {

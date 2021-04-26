@@ -4,9 +4,9 @@
       v-if="this.officeName.length != 0"
       :data="officeName"
       style="width: 100%"
-      max-height="650"
+      max-height="auto"
     >
-      <el-table-column>
+      <!-- <el-table-column>
         <template slot-scope="{ row }">
           <el-col>
             <el-button @click="emitAddress(row)">
@@ -14,7 +14,7 @@
             </el-button>
           </el-col>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column id="offiName" label="오피스텔명" prop="value">
       </el-table-column>
 

@@ -1,23 +1,28 @@
 <template>
   <div>
     <div id="map" class="map"></div>
-    <town-info :currentData="currentData" v-if="townInfoVisible" />
+    <town-info
+      :currentData="currentData"
+      :homeType="homeType"
+      v-if="townInfoVisible"
+    />
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import store from "../store/store"
+import store from "../store/store";
 import townInfo from "./TownInfo.vue";
 import constant from "../store/constant";
 import eventbus from "../store/EventBus";
-eventbus;
+
 export default {
   props: {
     searchResult: Array,
     searchCitiesResult: Array,
     emphasizedMarker: String,
     townInfoVisible: Boolean,
+    homeType: String,
   },
   components: {
     townInfo,
@@ -42,6 +47,9 @@ export default {
       : this.addKakaoMapScript();
   },
   watch: {
+    homeType: function() {
+      this.getTranslatedDataWithLocation();
+    },
     chosenAddress: function(val) {
       this.$emit("updateChosenAddress", val);
     },
@@ -225,7 +233,12 @@ export default {
       this.cityMarkerList.push(marker);
     },
     getTranslatedDataWithLocation() {
-      axios.get(store.state.SPRING_SERVER + "getTranslatedDataWithLocation")
+      this.cityMarkerList.map((marker) => marker.setMap(null));
+      this.cityMarkerList = [];
+      axios
+        .post(store.state.SPRING_SERVER + "getTranslatedDataWithLocation", {
+          homeType: this.homeType,
+        })
         .then((res) => {
           let val = res.data.aggregations.group_by_state.buckets;
           for (let data of val) {

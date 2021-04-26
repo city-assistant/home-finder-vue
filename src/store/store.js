@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    SPRING_SERVER: constant.state.BACK_SERVER_REAL,
+    SPRING_SERVER: constant.state.BACK_SERVER_LOCAL,
   },
   mutations: {
   },

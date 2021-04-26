@@ -1,45 +1,51 @@
 <template>
   <div id="townInfo">
-    <div v-if="needRent == 0">
-      분석 정보가 부족해 차트로 표현되지 않았습니다.
-    </div>
-    {{ currentData }} 정보<br /><br />
-    <el-button
-      v-if="this.$cookies.get('userToken') != null"
-      v-on:click="saveUserInterest"
-      type="primary"
-      icon="el-icon-save"
-      >Save</el-button
-    ><br /><br />
-    전월세 전환률 설정 : {{ transferRatio }}%
-    <!-- https://kosis.kr/statHtml/statHtml.do?orgId=408&tblId=DT_30404_N0010 참고 -->
-    <div class="block">
-      <el-slider
-        style="margin: 10px"
-        v-model="transferRatio"
-        step="0.1"
-        show-stops
-        :max="10"
-      >
-      </el-slider>
-    </div>
-    <BarChart :passData="translatedData" /><br />
-    가용 보증금 : {{ possibleDeposit }} 만원
-    <div class="block">
-      <el-slider
-        style="margin: 10px"
-        v-model="possibleDeposit"
-        step="100"
-        show-stops
-        :max="10000"
-      >
-      </el-slider>
-    </div>
-    10평(33제곱미터)당 <br />
-    예상 필요 월세 : {{ needRent }} <br /><br />
-    <LineChart :passData="passRentData" />
-    <LineChart :passData="passDepositData" />
-    상권이나 근린, 역, 편의점 등의 정보
+    <el-menu default-active="true" background-color="#ffffff">
+      <el-submenu index="">
+        <div class="insideTownInfo">
+          <div v-if="needRent == 0">
+            분석 정보가 부족해 차트로 표현되지 않았습니다.
+          </div>
+          {{ currentData }} 정보<br /><br />
+          <el-button
+            v-if="this.$cookies.get('userToken') != null"
+            v-on:click="saveUserInterest"
+            type="primary"
+            icon="el-icon-save"
+            >Save</el-button
+          ><br /><br />
+          전월세 전환률 설정 : {{ transferRatio }}%
+          <!-- https://kosis.kr/statHtml/statHtml.do?orgId=408&tblId=DT_30404_N0010 참고 -->
+          <div class="block">
+            <el-slider
+              style="margin: 10px"
+              v-model="transferRatio"
+              step="0.1"
+              show-stops
+              :max="10"
+            >
+            </el-slider>
+          </div>
+          <BarChart :passData="translatedData" /><br />
+          가용 보증금 : {{ possibleDeposit }} 만원
+          <div class="block">
+            <el-slider
+              style="margin: 10px"
+              v-model="possibleDeposit"
+              step="100"
+              show-stops
+              :max="10000"
+            >
+            </el-slider>
+          </div>
+          10평(33제곱미터)당 <br />
+          예상 필요 월세 : {{ needRent }} <br /><br />
+          <LineChart :passData="passRentData" />
+          <LineChart :passData="passDepositData" />
+          상권이나 근린, 역, 편의점 등의 정보
+        </div>
+      </el-submenu>
+    </el-menu>
   </div>
 </template>
 
@@ -56,6 +62,7 @@ export default {
   },
   props: {
     currentData: String,
+    homeType: String
   },
   data() {
     return {
@@ -132,10 +139,8 @@ export default {
       console.log(this.translatedData);
     },
     getChartData(val) {
-      axios.post(
-          store.state.SPRING_SERVER + "getChartData",
-          { city: val }
-        )
+      axios
+        .post(store.state.SPRING_SERVER + "getChartData", { city: val, homeType: this.homeType })
         .then((res) => {
           console.log(res.data);
           let labels = [];

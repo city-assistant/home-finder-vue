@@ -4,7 +4,13 @@
     MyPage
     <button v-on:click="logOut">
       logout
-    </button>
+    </button><br><br>
+    <el-radio-group v-model="homeType" size="mini">
+      <el-radio-button label="officetel">오피스텔</el-radio-button>
+      <el-radio-button label="apartment">아파트</el-radio-button>
+      <el-radio-button label="single">단독다가구</el-radio-button>
+      <el-radio-button label="multiple">연립다세대</el-radio-button>
+    </el-radio-group>
     <div class="wrapper">
       <div class="longBox" v-for="(item, index) in userSavedList" :key="index">
         <div class="innerBox">
@@ -44,15 +50,21 @@ export default {
       userSavedList: [],
       passData: {},
       loaded: {},
+      homeType: "officetel"
     };
+  },
+  watch: {
+    homeType: function() {
+      this.getUserInterestList()
+    }
   },
   methods: {
     getCityData(injectData) {
       let userToken = this.$cookies.get("userToken");
       axios
         .post(
-          store.state.SPRING_SERVER + "officetelPrefixSearch",
-          { city: injectData },
+          store.state.SPRING_SERVER + "prefixSearch",
+          { city: injectData, homeType: this.homeType },
           { headers: { Authorization: "Bearer " + userToken } }
         )
         .then((res) => {

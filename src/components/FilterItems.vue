@@ -23,17 +23,6 @@
           size="mini"
         ></el-input-number>
 
-
-        <!-- 주거 형태 -->
-        <div style="margin-top: 20px">
-          <el-radio-group v-model="homeType" size="mini">
-            <el-radio-button label="오피스텔"></el-radio-button>
-            <el-radio-button label="아파트"></el-radio-button>
-            <el-radio-button label="단독다가구"></el-radio-button>
-            <el-radio-button label="연립다세대"></el-radio-button>
-          </el-radio-group>
-        </div>
-
         <!-- 거래 방식 -->
         <div style="margin-top: 20px">
           <el-radio-group v-model="leaseType" size="mini">
@@ -91,7 +80,6 @@ export default {
       distance: 5,
       rentStep: 10, depositStep: 100, areaStep: 10, timeStep: 1,
       num: 15,
-      homeType: "오피스텔",
       leaseType: "월세",
       deposit: [0, 5000],
       rent: [0, 50],
